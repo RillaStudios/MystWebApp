@@ -6,36 +6,54 @@ import {
   Overlay,
   Text,
   Title,
+  useMantineColorScheme,
 } from "@mantine/core";
 import classes from "../../css/CallToActionHero.module.css";
 
 export function CallToActionHero() {
+  const { colorScheme } = useMantineColorScheme();
+  const isDark = colorScheme === "dark";
+
   return (
     <div className={classes.wrapper}>
-      <Overlay bg={"orange.4"} color="#000" opacity={0.65} zIndex={1} />
+      <Overlay
+        bg={isDark ? "orange.7" : "orange.5"}
+        color={isDark ? "#fff" : "#000"}
+        opacity={isDark ? 0.85 : 0.75}
+        zIndex={1}
+      />
 
       <div className={classes.inner}>
         <Title className={classes.title}>
-          Automated AI code reviews for{" "}
-          <Text component="span" inherit className={classes.highlight}>
-            any stack
-          </Text>
+          The{" "}
+          <Text component="span" inherit c={"dark"}>
+            Ultimate
+          </Text>{" "}
+          Extractor Kit
         </Title>
 
         <Container size={640}>
-          <Text size="lg" className={classes.description}>
-            Build more reliable software with AI companion. AI is also trained
-            to detect lazy developers who do nothing and just complain on
-            Twitter.
+          <Text size="md" className={classes.description}>
+            Powerful. Portable. Precision Cleaning by Myst – Because Your Car
+            Deserves More Than a Wipe Down.
           </Text>
         </Container>
 
         <Center mt="lg">
           <Group>
-            <Button variant="filled" bg={"primary.5"} size="md">
+            <Button variant="filled" color="dark" size="md">
               Buy Now
             </Button>
-            <Button size="md" variant="outline">
+            <Button
+              size="md"
+              variant="outline"
+              color="white"
+              styles={{
+                root: {
+                  borderColor: "white",
+                },
+              }}
+            >
               Learn More
             </Button>
           </Group>

@@ -1,10 +1,10 @@
 .wrapper {
   position: relative;
   padding-top: 180px;
-  padding-bottom: 130px;
-  background-image: url(http://localhost:8000/media/extractor_hero.jpg);
+  padding-bottom: 180px;
+  background-image: url(../../src//assets//extractor_hero.png);
   background-size: cover;
-  background-position: center;
+  background-position: bottom;
 
   @media (max-width: $mantine-breakpoint-xs) {
     padding-top: 80px;
@@ -32,10 +32,6 @@
     font-size: 28px;
     text-align: left;
   }
-}
-
-.highlight {
-  color: var(--mantine-color-primary-8);
 }
 
 .description {

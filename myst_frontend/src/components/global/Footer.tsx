@@ -1,38 +1,32 @@
-import {
-  IconBrandInstagram,
-  IconBrandTwitter,
-  IconBrandYoutube,
-} from "@tabler/icons-react";
+import { IconBrandFacebook } from "@tabler/icons-react";
 import { ActionIcon, Container, Group, Text } from "@mantine/core";
 import classes from "../../css/Footer.module.css";
 import MystLogo from "../ui/logo";
 
 const data = [
   {
-    title: "About",
+    title: "Navigation",
     links: [
-      { label: "Features", link: "#" },
-      { label: "Pricing", link: "#" },
-      { label: "Support", link: "#" },
-      { label: "Forums", link: "#" },
+      { label: "Home", link: "#" },
+      { label: "Mystle", link: "#" },
+      { label: "Contact", link: "#" },
     ],
   },
   {
-    title: "Project",
+    title: "Legal",
     links: [
-      { label: "Contribute", link: "#" },
-      { label: "Media assets", link: "#" },
-      { label: "Changelog", link: "#" },
-      { label: "Releases", link: "#" },
+      { label: "Privacy Policy", link: "#" },
+      { label: "Terms & Conditions", link: "#" },
+      { label: "Refund Policy", link: "#" },
+      { label: "Shipping & Delivery", link: "#" },
+      { label: "Warranty Information", link: "#" },
     ],
   },
   {
-    title: "Community",
+    title: "Support",
     links: [
-      { label: "Join Discord", link: "#" },
-      { label: "Follow on Twitter", link: "#" },
-      { label: "Email newsletter", link: "#" },
-      { label: "GitHub discussions", link: "#" },
+      { label: "Track Your Order", link: "#" },
+      { label: "User Manual", link: "#" },
     ],
   },
 ];
@@ -72,7 +66,7 @@ export function Footer() {
       </Container>
       <Container className={classes.afterFooter}>
         <Text c="dimmed" size="sm">
-          © 2020 mantine.dev. All rights reserved.
+          © 2025 Myst Detailing. All rights reserved.
         </Text>
 
         <Group
@@ -82,13 +76,14 @@ export function Footer() {
           wrap="nowrap"
         >
           <ActionIcon size="lg" color="gray" variant="subtle">
-            <IconBrandTwitter size={18} stroke={1.5} />
-          </ActionIcon>
-          <ActionIcon size="lg" color="gray" variant="subtle">
-            <IconBrandYoutube size={18} stroke={1.5} />
-          </ActionIcon>
-          <ActionIcon size="lg" color="gray" variant="subtle">
-            <IconBrandInstagram size={18} stroke={1.5} />
+            <a
+              href="https://www.facebook.com/MYSTDetailing.PEI"
+              target="_blank"
+              style={{ color: "inherit", textDecoration: "none" }}
+              rel="noopener noreferrer"
+            >
+              <IconBrandFacebook size={18} stroke={1.5} />
+            </a>
           </ActionIcon>
         </Group>
       </Container>
