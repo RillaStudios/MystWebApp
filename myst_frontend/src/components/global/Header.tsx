@@ -13,6 +13,7 @@ import { useDisclosure } from "@mantine/hooks";
 import MystLogo from "../ui/logo";
 import ThemeToggle from "../ui/buttons/theme_toggler";
 import { Link } from "react-router-dom";
+import CountryPicker from "../ui/CountryPicker";
 
 const links = [
   { link: "/", label: "Home" },
@@ -82,7 +83,10 @@ export function Header() {
               justifyContent: "end",
             }}
           >
-            <ThemeToggle />
+            <Group>
+              <CountryPicker />
+              <ThemeToggle />
+            </Group>
           </Box>
           <Burger
             opened={drawerOpened}

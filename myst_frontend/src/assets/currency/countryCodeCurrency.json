@@ -1,0 +1,92 @@
+{
+   "au": {
+      "Currency": "aud"
+   },
+   "bg": {
+      "Currency": "bgn"
+   },
+   "br": {
+      "Currency": "brl"
+   },
+   "ca": {
+      "Currency": "cad"
+   },
+   "ch": {
+      "Currency": "chf"
+   },
+   "cn": {
+      "Currency": "cny"
+   },
+   "cz": {
+      "Currency": "czk"
+   },
+   "dk": {
+      "Currency": "dkk"
+   },
+      "eu": {
+      "Currency": "eur"
+   },
+   "gb": {
+      "Currency": "gbp"
+   },
+   "hk": {
+      "Currency": "hkd"
+   },
+   "hu": {
+      "Currency": "huf"
+   },
+   "id": {
+      "Currency": "idr"
+   },
+   "il": {
+      "Currency": "ils"
+   },
+   "in": {
+      "Currency": "inr"
+   },
+   "is": {
+      "Currency": "isk"
+   },
+   "jp": {
+      "Currency": "jpy"
+   },
+   "kr": {
+      "Currency": "krw"
+   },
+   "mx": {
+      "Currency": "mxn"
+   },
+   "my": {
+      "Currency": "myr"
+   },
+   "no": {
+      "Currency": "nok"
+   },
+   "nz": {
+      "Currency": "nzd"
+   },
+   "ph": {
+      "Currency": "php"
+   },
+   "pl": {
+      "Currency": "pln"
+   },
+   "ro": {
+      "Currency": "ron"
+   },
+   "se": {
+      "Currency": "sek"
+   },
+   "sg": {
+      "Currency": "sgd"
+   },
+   "tr": {
+      "Currency": "try"
+   },
+   "us": {
+      "Currency": "usd"
+   },
+   "za": {
+      "Currency": "zar"
+   }
+}

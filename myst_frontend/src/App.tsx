@@ -5,12 +5,15 @@ import { MantineProvider } from "@mantine/core";
 import { appTheme } from "./themes/theme";
 import AppRouter from "./components/router/AppRouter";
 import { Notifications } from "@mantine/notifications";
+import { CurrencyProvider } from "./context/CurrencyContext";
 
 function App() {
   return (
     <MantineProvider theme={appTheme} defaultColorScheme="auto">
       <Notifications />
-      <AppRouter />
+      <CurrencyProvider>
+        <AppRouter />
+      </CurrencyProvider>
     </MantineProvider>
   );
 }

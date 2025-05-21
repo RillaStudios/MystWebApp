@@ -12,6 +12,7 @@ import classes from "../../css/CallToActionHero.module.css";
 
 export function CallToActionHero() {
   const { colorScheme } = useMantineColorScheme();
+
   const isDark = colorScheme === "dark";
 
   return (

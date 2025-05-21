@@ -1,11 +1,13 @@
 // context/CurrencyContext.tsx
 import { createContext, useContext, useEffect, useState } from "react";
+import countryCurrencyMap from "../assets/currency/countryCodeCurrency.json";
 import axios from "axios";
 
 type CurrencyContextType = {
+  country: string;
   currency: string;
   rate: number;
-  setCurrency: (currency: string) => void;
+  changeCountryAndCurrency: (country: string, currency: string) => void;
   format: (value: number) => string;
 };
 
@@ -13,44 +15,130 @@ const CurrencyContext = createContext<CurrencyContextType | undefined>(
   undefined,
 );
 
-const SUPPORTED_CURRENCIES = ["USD", "EUR", "GBP", "JPY", "CAD"];
-const DEFAULT_CURRENCY = "USD";
+const SUPPORTED_CURRENCIES = [
+  ...new Set(
+    Object.values(countryCurrencyMap).map((item) =>
+      (item as { Currency: string }).Currency.toUpperCase(),
+    ),
+  ),
+].sort();
+
+const DEFAULT_CURRENCY = "CAD";
+const DEFAULT_COUNTRY = "CA";
 
 export const CurrencyProvider = ({
   children,
 }: {
   children: React.ReactNode;
 }) => {
-  const [currency, setCurrencyState] = useState(DEFAULT_CURRENCY);
+  // State to manage country code
+  const [country, setCountry] = useState(DEFAULT_COUNTRY);
+
+  // State to manage currency type
+  const [currency, setCurrency] = useState(DEFAULT_CURRENCY);
+
+  // State to manage exchange rate
   const [rate, setRate] = useState(1);
 
-  // Load initial currency from localStorage
+  // Load initial country info from localStorage or fetch it
+  // via APIs if not available
   useEffect(() => {
-    const saved = localStorage.getItem("currency");
-    if (saved && SUPPORTED_CURRENCIES.includes(saved)) {
-      setCurrencyState(saved);
+    // Check if the country code and currency are already saved in localStorage
+    const savedIntlData = localStorage.getItem("i18n");
+
+    // If not, fetch the country code and currency from the API
+    if (
+      savedIntlData === null ||
+      savedIntlData === undefined ||
+      savedIntlData === ""
+    ) {
+      axios
+        .get(`https://ipapi.co/country_code/`)
+        .then((res) => {
+          // Set country code to data from API and convert to lowercase
+          const countryCode = res.data.toLowerCase();
+
+          // Get the currency code from the map using the country code
+          const currencyCode =
+            countryCurrencyMap[countryCode as keyof typeof countryCurrencyMap]
+              ?.Currency;
+
+          // If the currency code is found in the map, and the currency
+          // code is supported, set the currency and save it to localStorage
+          if (
+            currencyCode &&
+            SUPPORTED_CURRENCIES.includes(currencyCode.toLocaleUpperCase())
+          ) {
+            // Set the currency to the found currency code
+            setCurrency(currencyCode);
+
+            // Set the country code to the found country code
+            setCountry(countryCode);
+
+            // Save the country code and currency code to localStorage
+            localStorage.setItem(
+              "i18n",
+              JSON.stringify({
+                country: countryCode,
+                currency: currencyCode,
+              }),
+            );
+          }
+        })
+        // Handle errors
+        .catch((err) => {
+          // Check if the error is an Axios error
+          if (axios.isAxiosError(err)) {
+            console.error("Axios error:", err.message);
+          } else {
+            console.error("Error fetching country code:", err);
+          }
+
+          // Set default country code and currency
+          setCountry(DEFAULT_COUNTRY);
+          setCurrency(DEFAULT_CURRENCY);
+        });
+      return;
+    } else {
+      // If the country code and currency are already saved in localStorage,
+      // parse the saved data and set the currency
+      const { currency: savedCurrency, country: savedCountry } =
+        JSON.parse(savedIntlData);
+
+      // Set the currency and country code from the saved data
+      setCurrency(savedCurrency);
+      setCountry(savedCountry);
     }
-  }, []);
 
-  // Fetch exchange rate when currency changes
-  useEffect(() => {
-    localStorage.setItem("currency", currency);
-
-    if (currency === DEFAULT_CURRENCY) {
+    // If the currency is not supported, or if the currency is
+    // CAD, set the rate to 1
+    if (!SUPPORTED_CURRENCIES.includes(currency)) {
       setRate(1);
       return;
     }
 
+    // Fetch the exchange rate from CAD to the selected currency
+    // using the Frankfurter API
+    getExchangeRate(currency);
+  }, []);
+
+  const getExchangeRate = (currency: string) => {
+    // Fetch the exchange rate from CAD to the selected currency
+    // using the Frankfurter API
+
+    if (currency.toLocaleLowerCase() === "cad") {
+      setRate(1);
+      console.log("Currency is CAD, setting rate to 1");
+      return;
+    }
+
     axios
-      .get(`https://api.exchangerate.host/convert`, {
-        params: {
-          from: DEFAULT_CURRENCY,
-          to: currency,
-        },
-      })
-      .then((res: { data: { result: number } }) => {
-        const result = res.data.result;
-        setRate(result || 1);
+      .get(`https://api.frankfurter.app/latest?from=CAD&to=${currency}`)
+      .then((res) => {
+        // Extract the rate for the requested currency from the rates object
+        const exchangeRate = res.data.rates[currency];
+        setRate(exchangeRate || 1);
+        console.log("Exchange rate:", exchangeRate);
       })
       .catch((err: unknown) => {
         if (axios.isAxiosError(err)) {
@@ -60,22 +148,42 @@ export const CurrencyProvider = ({
         }
         setRate(1);
       });
-  }, [currency]);
+  };
 
-  const setCurrency = (newCurrency: string) => {
+  const changeCountryAndCurrency = (
+    newCountry: string,
+    newCurrency: string,
+  ) => {
     if (SUPPORTED_CURRENCIES.includes(newCurrency)) {
-      setCurrencyState(newCurrency);
+      // Save the new currency to localstorage
+      localStorage.setItem(
+        "i18n",
+        JSON.stringify({
+          country: newCountry,
+          currency: newCurrency,
+        }),
+      );
+
+      // Set the new country and currency
+      setCountry(newCountry);
+      setCurrency(newCurrency);
+
+      // Fetch the exchange rate for the new currency
+      // and update the rate state
+      getExchangeRate(newCurrency);
     }
   };
 
   const format = (value: number) =>
-    new Intl.NumberFormat("en-US", {
+    new Intl.NumberFormat("en-CA", {
       style: "currency",
       currency,
     }).format(value * rate);
 
   return (
-    <CurrencyContext.Provider value={{ currency, rate, setCurrency, format }}>
+    <CurrencyContext.Provider
+      value={{ country, currency, rate, changeCountryAndCurrency, format }}
+    >
       {children}
     </CurrencyContext.Provider>
   );

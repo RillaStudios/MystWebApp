@@ -8,8 +8,20 @@ import {
   Button,
 } from "@mantine/core";
 import { CarouselCard } from "../ui/Carousel";
+import { useCurrency } from "../../context/CurrencyContext";
 
 export default function CarouselHero() {
+  const { rate, currency } = useCurrency();
+
+  const price = 279.99;
+
+  const priceInLocalCurrency = rate * price;
+
+  const formattedPrice = new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: currency,
+  }).format(priceInLocalCurrency);
+
   return (
     <Container maw={1200} mx="auto">
       <SimpleGrid cols={{ base: 1, sm: 2 }} spacing="lg" py={120}>
@@ -42,7 +54,7 @@ export default function CarouselHero() {
           </Spoiler>
           <Space h={20} />
           <Title order={2} fw={"bold"}>
-            $349 CAD
+            {formattedPrice}
           </Title>
           <Space h={20} />
           <Button size="lg">Buy Now</Button>

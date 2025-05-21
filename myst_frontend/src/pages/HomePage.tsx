@@ -7,14 +7,12 @@ import AssembledInCanHero from "../components/heros/AssembledInCanHero";
 import { FeaturesCardHero } from "../components/heros/FeatureCardHero";
 import { FaqWithBg } from "../components/heros/FaqHero";
 import CarouselHero from "../components/heros/CarouselHero";
-import CountryPicker from "../components/ui/CountryPicker";
 
 export default function HomePage() {
   return (
     <HeadFootLayout>
       <CallToActionHero />
       <CarouselHero />
-      <CountryPicker />
       <FeaturesCardHero />
       <AssembledInCanHero />
       <FaqWithBg />
