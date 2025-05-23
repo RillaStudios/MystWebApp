@@ -1,6 +1,6 @@
 from django.db import models
 
-from myst_commerce.enums.address_type import AddressType
+from myst_api.enums.address_type import AddressType
 
 
 class Customer(models.Model):
@@ -17,7 +17,7 @@ class Customer(models.Model):
     customer_city = models.CharField(max_length=100)
     customer_prov_state = models.CharField(max_length=100)
     customer_postal_zip_code = models.CharField(max_length=20)
-    customer_address_type = models.CharField(max_length=50, choices=[AddressType.value])
+    customer_address_type = models.CharField(max_length=50, choices=[(status.value, status.name) for status in AddressType])
 
     def __str__(self):
         return self.customer_name

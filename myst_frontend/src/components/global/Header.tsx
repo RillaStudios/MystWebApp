@@ -7,6 +7,7 @@ import {
   Grid,
   Group,
   ScrollArea,
+  Text,
 } from "@mantine/core";
 import classes from "../../css/Header.module.css";
 import { useDisclosure } from "@mantine/hooks";
@@ -14,12 +15,12 @@ import MystLogo from "../ui/logo";
 import ThemeToggle from "../ui/buttons/theme_toggler";
 import { Link } from "react-router-dom";
 import CountryPicker from "../ui/CountryPicker";
+import { HashLink } from "react-router-hash-link";
 
 const links = [
   { link: "/", label: "Home" },
-  { link: "/pricing", label: "Pricing" },
-  { link: "/learn", label: "Learn" },
-  { link: "/community", label: "Contact" },
+  { link: "/#mystle", label: "Mystle" },
+  { link: "/#contact", label: "Contact" },
 ];
 
 export function Header() {
@@ -27,20 +28,32 @@ export function Header() {
     useDisclosure(false);
   const [active, setActive] = useState(links[0].link);
 
-  const items = links.map((link) => (
-    <Link
-      key={link.label}
-      to={link.link}
-      className={classes.link}
-      data-active={active === link.link || undefined}
-      onClick={() => {
-        setActive(link.link);
-        closeDrawer();
-      }}
-    >
-      {link.label}
-    </Link>
-  ));
+  const items = links.map((link) =>
+    link.label === "Contact" || link.label === "Mystle" ? (
+      <Text
+        key={link.label}
+        className={classes.link}
+        component={HashLink}
+        smooth
+        to={link.link}
+      >
+        {link.label}
+      </Text>
+    ) : (
+      <Link
+        key={link.label}
+        to={link.link}
+        className={classes.link}
+        data-active={active === link.link || undefined}
+        onClick={() => {
+          setActive(link.link);
+          closeDrawer();
+        }}
+      >
+        {link.label}
+      </Link>
+    ),
+  );
 
   return (
     <header className={classes.header}>

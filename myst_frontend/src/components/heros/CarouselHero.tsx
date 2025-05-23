@@ -6,21 +6,39 @@ import {
   Space,
   Spoiler,
   Button,
+  Group,
 } from "@mantine/core";
 import { CarouselCard } from "../ui/Carousel";
 import { useCurrency } from "../../context/CurrencyContext";
+import { useEffect, useState } from "react";
+import { NumberInput } from "@mantine/core";
+import { useNavigate } from "react-router-dom";
 
-export default function CarouselHero() {
-  const { rate, currency } = useCurrency();
+export default function CarouselHero({ checkout }: { checkout?: boolean }) {
+  const { rate, currency, loading } = useCurrency();
+  const navigate = useNavigate();
+  const [price, setPrice] = useState("");
+  const [quantity, setQuantity] = useState<string | number>("1");
 
-  const price = 279.99;
+  const raw_price = 299.99;
 
-  const priceInLocalCurrency = rate * price;
+  // Price state
+  useEffect(() => {
+    // Fetch the exchange rate for the new currency
+    // and update the rate state
+    if (loading) {
+      return;
+    }
 
-  const formattedPrice = new Intl.NumberFormat("en-US", {
-    style: "currency",
-    currency: currency,
-  }).format(priceInLocalCurrency);
+    const priceInLocalCurrency = rate * raw_price * Number(quantity);
+
+    const formattedPrice = new Intl.NumberFormat(undefined, {
+      style: "currency",
+      currency: currency.toUpperCase(),
+    }).format(priceInLocalCurrency);
+
+    setPrice(formattedPrice);
+  }, [loading, rate, currency, quantity]);
 
   return (
     <Container maw={1200} mx="auto">
@@ -53,11 +71,65 @@ export default function CarouselHero() {
             </Text>
           </Spoiler>
           <Space h={20} />
-          <Title order={2} fw={"bold"}>
-            {formattedPrice}
-          </Title>
+          {checkout ? (
+            <Group gap={4}>
+              <Title order={2} fw={"bold"}>
+                {price}
+              </Title>
+              <Text size="sm" c="dimmed">
+                + tax
+              </Text>
+            </Group>
+          ) : (
+            <Title order={2} fw={"bold"}>
+              {price}
+            </Title>
+          )}
           <Space h={20} />
-          <Button size="lg">Buy Now</Button>
+          {checkout && (
+            <>
+              <NumberInput
+                label="Quantity"
+                min={1}
+                max={100}
+                allowDecimal={false}
+                allowNegative={false}
+                defaultValue={1}
+                value={quantity}
+                onChange={setQuantity}
+                maw={75}
+                onBlur={() => {
+                  if (typeof quantity === "string") {
+                    const parsedQuantity = parseInt(quantity);
+
+                    if (isNaN(parsedQuantity) || parsedQuantity < 1) {
+                      setQuantity(1);
+                    } else {
+                      setQuantity(parsedQuantity);
+                    }
+                  }
+                }}
+              />
+              <Space h={20} />
+            </>
+          )}
+          <Button
+            size="lg"
+            onClick={() => {
+              if (checkout) {
+                // Handle checkout logic here
+                console.log("Proceeding to checkout with quantity:", quantity);
+                navigate("/checkout", {
+                  state: { product_id: 1, quantity: quantity },
+                });
+              } else {
+                // Handle buy now logic here
+                console.log("Buying now with quantity:", quantity);
+              }
+            }}
+          >
+            {checkout ? "Proceed to Checkout" : "Buy Now"}
+          </Button>
         </div>
         <div>
           <CarouselCard />

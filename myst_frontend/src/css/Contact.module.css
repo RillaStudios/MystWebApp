@@ -54,6 +54,16 @@
   }
 }
 
+.errorInput {
+  background-color: var(--mantine-color-white);
+  border-color: var(--mantine-color-red-4);
+  color: var(--mantine-color-black);
+
+  &::placeholder {
+    color: var(--mantine-color-gray-5);
+  }
+}
+
 .inputLabel {
   color: var(--mantine-color-black);
 }

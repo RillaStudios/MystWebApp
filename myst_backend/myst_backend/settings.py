@@ -22,7 +22,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'django-insecure-@pb=eqh4^-8^w=_3qv!%r0j=4+=c$z5_5r9#=-%z99(n15k4&4'
 
-STRIPE_API_KEY = 'sk_test_51RPXJlP8sXxWrDwbIwMFKU9Am84WaEr0lx6CmYkSQI5lQMWqPJGZVh5TsiD5I0E6p6nsqkvu1hQYWdVvBr2gJxnF00EFhgud2S'
+STRIPE_PUBLIC_KEY = 'pk_test_51RPXJd050Kn7qGrTrB3W4nRQSY9k62vpB6XbttCUhLydemYN3YEhzh3nrepsDt7SjoWleMImCMCPSJsgb5kmEkcB00lOiaKqXo'
+STRIPE_SECRET_KEY = 'sk_test_51RPXJd050Kn7qGrTPrELiPYhlPf7kpHFcP3fynwKfK7LQr8Rx9E3dEuJ9C8tycYiTuU32JXVhmWJFnwxx8vz1m7c00F8Q25g1E'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -39,8 +40,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'myst_commerce.apps.MystCommerceConfig',
     'rest_framework',
+    'corsheaders',
+    'myst_api.apps.MystApiConfig'
 ]
 
 MIDDLEWARE = [
@@ -51,7 +53,15 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
 ]
+
+CORS_ALLOW_CREDENTIALS = True
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:5173",  # Your frontend origin
+]
+CORS_ALLOW_METHODS = ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"]
+CORS_ALLOW_HEADERS = ["Content-Type", "Authorization"]
 
 ROOT_URLCONF = 'myst_backend.urls'
 
@@ -75,8 +85,25 @@ WSGI_APPLICATION = 'myst_backend.wsgi.application'
 REST_FRAMEWORK = {
     'DEFAULT_RENDERER_CLASSES': [
         'rest_framework.renderers.JSONRenderer',
-    ]
+    ],
+    # 'DEFAULT_THROTTLE_CLASSES': [
+    #     'rest_framework.throttling.AnonRateThrottle',
+    #     'rest_framework.throttling.UserRateThrottle'
+    # ],
+    # 'DEFAULT_THROTTLE_RATES': {
+    #     'anon': '5/hour',
+    #     'user': '20/hour'
+    # },
 }
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_USE_SSL = False
+EMAIL_HOST_USER = 'mystdetailing@gmail.com'
+EMAIL_HOST_PASSWORD = 'inaa eeao pmob zcol'
+
 
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases

@@ -14,7 +14,7 @@
   &::after {
     content: '';
     display: block;
-    background-color: var(--mantine-color-blue-filled);
+    background-color: var(--mantine-color-primary-filled);
     width: 45px;
     height: 2px;
     margin-top: var(--mantine-spacing-sm);
@@ -31,7 +31,7 @@
   &::after {
     content: '';
     display: block;
-    background-color: var(--mantine-color-blue-filled);
+    background-color: var(--mantine-color-primary-filled);
     width: 45px;
     height: 2px;
     margin-top: var(--mantine-spacing-sm);

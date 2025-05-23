@@ -3,7 +3,7 @@ from django.core.mail import send_mail
 from rest_framework.response import Response
 from rest_framework.throttling import AnonRateThrottle
 from rest_framework.views import APIView
-from myst_contact.models.contact import Contact
+from myst_api.models.contact import Contact
 
 
 class ContactView(APIView):

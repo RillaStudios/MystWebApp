@@ -1,4 +1,4 @@
-import { IconCookie, IconGauge, IconUser } from "@tabler/icons-react";
+import { IconDashboard, IconBarbell, IconHomeSpark } from "@tabler/icons-react";
 import {
   Badge,
   Card,
@@ -13,27 +13,28 @@ import classes from "../../css/FeatureCard.module.css";
 
 const mockdata = [
   {
-    title: "Extreme performance",
+    title: "Deep cleaning power",
     description:
-      "This dust is actually a powerful poison that will even make a pro wrestler sick, Regice cloaks itself with frigid air of -328 degrees Fahrenheit",
-    icon: IconGauge,
+      "Effectively clean carpets, upholstery, and soft surfaces with ease, tackling stubborn stains and dirt.",
+    icon: IconDashboard,
   },
   {
-    title: "Privacy focused",
+    title: "Long lasting durability",
     description:
-      "People say it can run at the same speed as lightning striking, Its icy body is so cold, it will not melt even if it is immersed in magma",
-    icon: IconUser,
+      "Includes a 10ft anti-crush vacuum hose and 25ft water line made for maximum durability and reach during large or small cleaning jobs.",
+    icon: IconBarbell,
   },
   {
-    title: "No third parties",
+    title: "Professional results at home",
     description:
-      "They’re popular, but they’re rare. Trainers who show them off recklessly may be targeted by thieves",
-    icon: IconCookie,
+      "Achieve professional-grade carpet cleaning without the cost of traditional carpet extractors.",
+    icon: IconHomeSpark,
   },
 ];
 
 export function FeaturesCardHero() {
   const theme = useMantineTheme();
+
   const features = mockdata.map((feature) => (
     <Card
       key={feature.title}
@@ -42,7 +43,7 @@ export function FeaturesCardHero() {
       className={classes.card}
       padding="xl"
     >
-      <feature.icon size={50} stroke={1.5} color={theme.colors.blue[6]} />
+      <feature.icon size={50} stroke={1.5} color={theme.colors.primary[6]} />
       <Text fz="lg" fw={500} className={classes.cardTitle} mt="md">
         {feature.title}
       </Text>
@@ -56,17 +57,19 @@ export function FeaturesCardHero() {
     <Container size="lg" py="xl">
       <Group justify="center">
         <Badge variant="filled" size="lg">
-          Best company ever
+          Next-Level Cleaning Starts Here
         </Badge>
       </Group>
 
       <Title order={2} className={classes.title} ta="center" mt="sm">
-        Integrate effortlessly with any technology stack
+        Powerful cleaning, minimal setup, built for everyday use
       </Title>
 
       <Text c="dimmed" className={classes.description} ta="center" mt="md">
-        Every once in a while, you’ll see a Golbat that’s missing some fangs.
-        This happens when hunger drives it to try biting a Steel-type Pokémon.
+        The Mystle is engineered to simplify deep cleaning with a lightweight
+        system that connects directly to your vacuum and water line — no tools,
+        no headaches. Just plug in and power through grime, dust, and spills
+        wherever they hide.
       </Text>
 
       <SimpleGrid cols={{ base: 1, md: 3 }} spacing="xl" mt={50}>

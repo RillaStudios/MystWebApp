@@ -1,25 +1,26 @@
 import { IconBrandFacebook } from "@tabler/icons-react";
 import { ActionIcon, Container, Group, Text } from "@mantine/core";
 import classes from "../../css/Footer.module.css";
+import { HashLink } from "react-router-hash-link";
 import MystLogo from "../ui/logo";
 
 const data = [
   {
     title: "Navigation",
     links: [
-      { label: "Home", link: "#" },
-      { label: "Mystle", link: "#" },
-      { label: "Contact", link: "#" },
+      { label: "Home", link: "/" },
+      { label: "Mystle", link: "/#mystle" },
+      { label: "Contact", link: "/#contact" },
     ],
   },
   {
     title: "Legal",
     links: [
-      { label: "Privacy Policy", link: "#" },
-      { label: "Terms & Conditions", link: "#" },
-      { label: "Refund Policy", link: "#" },
-      { label: "Shipping & Delivery", link: "#" },
-      { label: "Warranty Information", link: "#" },
+      { label: "Privacy Policy", link: "/privacy" },
+      { label: "Terms & Conditions", link: "/terms" },
+      { label: "Refund Policy", link: "/refund" },
+      { label: "Shipping & Delivery", link: "/shipping" },
+      { label: "Warranty Information", link: "/warranty" },
     ],
   },
   {
@@ -33,17 +34,28 @@ const data = [
 
 export function Footer() {
   const groups = data.map((group) => {
-    const links = group.links.map((link, index) => (
-      <Text<"a">
-        key={index}
-        className={classes.link}
-        component="a"
-        href={link.link}
-        onClick={(event) => event.preventDefault()}
-      >
-        {link.label}
-      </Text>
-    ));
+    const links = group.links.map((link, index) =>
+      link.label === "Contact" || link.label === "Mystle" ? (
+        <Text
+          key={index}
+          className={classes.link}
+          component={HashLink}
+          smooth
+          to={link.link}
+        >
+          {link.label}
+        </Text>
+      ) : (
+        <Text
+          key={index}
+          className={classes.link}
+          component="a"
+          href={link.link}
+        >
+          {link.label}
+        </Text>
+      ),
+    );
 
     return (
       <div className={classes.wrapper} key={group.title}>

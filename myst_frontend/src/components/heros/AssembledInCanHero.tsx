@@ -12,9 +12,9 @@ export default function AssembledInCanHero() {
           Assembled in Canada
         </Title>
         <Text size="lg" style={{ textAlign: "center" }} mb="lg">
-          Our products are proudly assembled in Canada, ensuring the highest
-          quality and craftsmanship. We take pride in supporting local
-          manufacturing and delivering exceptional products to our customers.
+          The Mystle proudly assembled in Canada, ensuring the highest quality
+          and craftsmanship. We take pride in supporting local manufacturing and
+          delivering exceptional products to our customers.
         </Text>
       </Container>
     </Box>

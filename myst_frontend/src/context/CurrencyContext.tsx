@@ -7,6 +7,7 @@ type CurrencyContextType = {
   country: string;
   currency: string;
   rate: number;
+  loading: boolean;
   changeCountryAndCurrency: (country: string, currency: string) => void;
   format: (value: number) => string;
 };
@@ -37,21 +38,23 @@ export const CurrencyProvider = ({
   // State to manage currency type
   const [currency, setCurrency] = useState(DEFAULT_CURRENCY);
 
+  // Loading state
+  const [loading, setLoading] = useState(true);
+
   // State to manage exchange rate
   const [rate, setRate] = useState(1);
 
   // Load initial country info from localStorage or fetch it
   // via APIs if not available
   useEffect(() => {
+    // Set loading to true while fetching data
+    setLoading(true);
+
     // Check if the country code and currency are already saved in localStorage
     const savedIntlData = localStorage.getItem("i18n");
 
     // If not, fetch the country code and currency from the API
-    if (
-      savedIntlData === null ||
-      savedIntlData === undefined ||
-      savedIntlData === ""
-    ) {
+    if (!savedIntlData) {
       axios
         .get(`https://ipapi.co/country_code/`)
         .then((res) => {
@@ -97,6 +100,11 @@ export const CurrencyProvider = ({
           // Set default country code and currency
           setCountry(DEFAULT_COUNTRY);
           setCurrency(DEFAULT_CURRENCY);
+        })
+        .finally(() => {
+          // Set loading to false after fetching data
+          // or after error handling
+          setLoading(false);
         });
       return;
     } else {
@@ -112,15 +120,18 @@ export const CurrencyProvider = ({
 
     // If the currency is not supported, or if the currency is
     // CAD, set the rate to 1
-    if (!SUPPORTED_CURRENCIES.includes(currency)) {
+    if (!SUPPORTED_CURRENCIES.includes(currency.toLocaleUpperCase())) {
       setRate(1);
+      setLoading(false);
       return;
     }
 
     // Fetch the exchange rate from CAD to the selected currency
     // using the Frankfurter API
     getExchangeRate(currency);
-  }, []);
+
+    setLoading(false);
+  }, [currency, country]);
 
   const getExchangeRate = (currency: string) => {
     // Fetch the exchange rate from CAD to the selected currency
@@ -128,7 +139,6 @@ export const CurrencyProvider = ({
 
     if (currency.toLocaleLowerCase() === "cad") {
       setRate(1);
-      console.log("Currency is CAD, setting rate to 1");
       return;
     }
 
@@ -147,6 +157,11 @@ export const CurrencyProvider = ({
           console.error("Unknown error:", err);
         }
         setRate(1);
+      })
+      .finally(() => {
+        // Set loading to false after fetching data
+        // or after error handling
+        setLoading(false);
       });
   };
 
@@ -182,7 +197,14 @@ export const CurrencyProvider = ({
 
   return (
     <CurrencyContext.Provider
-      value={{ country, currency, rate, changeCountryAndCurrency, format }}
+      value={{
+        country,
+        currency,
+        rate,
+        loading,
+        changeCountryAndCurrency,
+        format,
+      }}
     >
       {children}
     </CurrencyContext.Provider>
