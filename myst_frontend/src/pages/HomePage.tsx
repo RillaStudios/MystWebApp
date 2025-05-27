@@ -14,15 +14,15 @@ import HeadFootLayout from "../layouts/HeadFootLayout";
 import AssembledInCanHero from "../components/heros/AssembledInCanHero";
 import { FeaturesCardHero } from "../components/heros/FeatureCardHero";
 import { FaqWithBg } from "../components/heros/FaqHero";
-import CarouselHero from "../components/heros/CarouselHero";
 import MystleVideoHero from "../components/heros/MystleVideoHero";
+import ProductHero from "../components/heros/ProductHero";
 
 export default function HomePage() {
   return (
     <HeadFootLayout>
       <CallToActionHero />
       <section id="mystle">
-        <CarouselHero />
+        <ProductHero product_id={1} />
       </section>
       <FeaturesCardHero />
       <AssembledInCanHero />

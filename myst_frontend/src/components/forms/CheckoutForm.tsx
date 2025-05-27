@@ -1,4 +1,9 @@
-import { useStripe, useElements, CardElement } from "@stripe/react-stripe-js";
+import {
+  useStripe,
+  useElements,
+  CardElement,
+  AddressElement,
+} from "@stripe/react-stripe-js";
 import { type FormEvent, useState } from "react";
 
 interface CheckoutFormProps {

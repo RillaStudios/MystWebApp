@@ -16,8 +16,12 @@ export const MYST_AUTH_ENDPOINTS = {
     CONTACT: {
         SUBMIT: `${MYST_API_BASE_URL}/contact/`,
     },
+    PRODUCT: {
+        GET_BY_ID: (id: Number) => `${MYST_API_BASE_URL}/product/${id}/`,
+    },
     CHECKOUT: {
         CREATE_SESSION: `${MYST_API_BASE_URL}/create-checkout-session/`,
+        SESSION_STATUS: `${MYST_API_BASE_URL}/checkout-session-status/`,
         COLLECT_PAYMENT: `${MYST_API_BASE_URL}/collect-payment/`,
     }
   // Add other endpoints as needed

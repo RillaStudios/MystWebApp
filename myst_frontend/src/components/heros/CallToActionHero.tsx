@@ -10,6 +10,7 @@ import {
 } from "@mantine/core";
 import { HashLink } from "react-router-hash-link";
 import classes from "../../css/CallToActionHero.module.css";
+import BuyNowButton from "../ui/buttons/buy_now_button";
 
 export function CallToActionHero() {
   const { colorScheme } = useMantineColorScheme();
@@ -43,9 +44,7 @@ export function CallToActionHero() {
 
         <Center mt="lg">
           <Group>
-            <Button variant="filled" color="primary" size="md">
-              Buy Now
-            </Button>
+            <BuyNowButton product_id={1} quantity={1} />
             <Button
               component={HashLink}
               to="/#mystle"

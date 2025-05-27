@@ -7,6 +7,7 @@ import TermsPage from "../../pages/TermsPage";
 import PrivacyPage from "../../pages/PrivacyPage";
 import BuyPage from "../../pages/BuyPage";
 import CheckoutPage from "../../pages/CheckoutPage";
+import { Return } from "../../pages/ReturnPage";
 
 export default function AppRouter() {
   return (
@@ -20,6 +21,7 @@ export default function AppRouter() {
         <Route path="/privacy" element={<PrivacyPage />} />
         <Route path="/buy" element={<BuyPage />} />
         <Route path="/checkout" element={<CheckoutPage />} />
+        <Route path="/return" element={<Return />} />
         {/* Add more routes as needed */}
       </Routes>
     </BrowserRouter>
