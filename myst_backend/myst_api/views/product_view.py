@@ -3,16 +3,28 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from myst_api.models.product import Product
+from myst_api.throttles.product_anon_throttle import ProductAnonThrottle
 
 
 class ProductView(APIView):
     """
     This view handles the product-related API endpoints.
+    It supports GET requests to retrieve product information by product ID.
+
+    @author: IFD
     """
+    throttle_classes = [ProductAnonThrottle]
 
     def get(self, request, product_id):
         """
         Handle GET requests to retrieve product information.
+
+        @param request: The HTTP request object.
+        @param product_id: The unique identifier for the product.
+
+        @return: A JSON response containing product details or an error message if the product is not found.
+
+        @author: IFD
         """
 
         try:

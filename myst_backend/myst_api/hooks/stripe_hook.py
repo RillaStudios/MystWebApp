@@ -6,6 +6,20 @@ from myst_backend import settings
 
 @csrf_exempt
 def stripe_webhook(request):
+    """
+    Handle Stripe webhook events.
+    This function listens for events from Stripe, verifies the signature,
+    and processes the event accordingly.
+
+    It specifically handles the 'checkout.session.completed' event to create an order.
+
+    :param request:
+    :return:
+
+    @csrf_exempt: This decorator is used to exempt this view from CSRF verification.
+
+    @author IFD
+    """
     payload = request.body
     sig_header = request.META.get('HTTP_STRIPE_SIGNATURE')
     event = None

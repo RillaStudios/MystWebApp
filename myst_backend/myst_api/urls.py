@@ -10,6 +10,7 @@ from myst_api.views.review_view import ReviewView
 
 app_name = 'myst_api'
 
+# URL patterns for the myst_api application
 urlpatterns = [
     path('contact/', ContactView.as_view(), name='contact'),
     path('checkout-session/', CreateCheckoutSessionView.as_view(), name='checkout-session'),

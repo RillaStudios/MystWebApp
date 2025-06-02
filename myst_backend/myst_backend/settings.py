@@ -18,7 +18,6 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'django-insecure-@pb=eqh4^-8^w=_3qv!%r0j=4+=c$z5_5r9#=-%z99(n15k4&4'
 
-STRIPE_PUBLIC_KEY = 'pk_test_51RPXJd050Kn7qGrTrB3W4nRQSY9k62vpB6XbttCUhLydemYN3YEhzh3nrepsDt7SjoWleMImCMCPSJsgb5kmEkcB00lOiaKqXo'
 STRIPE_SECRET_KEY = 'sk_test_51RPXJd050Kn7qGrTPrELiPYhlPf7kpHFcP3fynwKfK7LQr8Rx9E3dEuJ9C8tycYiTuU32JXVhmWJFnwxx8vz1m7c00F8Q25g1E'
 STRIPE_WEBHOOK_SECRET = 'whsec_28fd2c083f9fdf34486d4160ba89f05d0bc5cdb8db3717bdb64912936a14b8e5'
 
@@ -26,7 +25,6 @@ STRIPE_WEBHOOK_SECRET = 'whsec_28fd2c083f9fdf34486d4160ba89f05d0bc5cdb8db3717bdb
 DEBUG = True
 
 ALLOWED_HOSTS = []
-
 
 # Application definition
 
@@ -84,14 +82,18 @@ REST_FRAMEWORK = {
     'DEFAULT_RENDERER_CLASSES': [
         'rest_framework.renderers.JSONRenderer',
     ],
-    # 'DEFAULT_THROTTLE_CLASSES': [
-    #     'rest_framework.throttling.AnonRateThrottle',
-    #     'rest_framework.throttling.UserRateThrottle'
-    # ],
-    # 'DEFAULT_THROTTLE_RATES': {
-    #     'anon': '5/hour',
-    #     'user': '20/hour'
-    # },
+    'DEFAULT_THROTTLE_CLASSES': [
+        'rest_framework.throttling.AnonRateThrottle'
+    ],
+    'DEFAULT_THROTTLE_RATES': {
+        'anon': '20/hour',
+        'checkout_session': '20/hour',
+        'contact-anon': '5/hour',
+        'exchange_anon': '50/hour',
+        'order_anon': '20/hour',
+        'product_anon': '80/hour',
+        'review_anon': '50/hour',
+    },
 }
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'

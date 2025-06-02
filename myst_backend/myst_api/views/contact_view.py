@@ -4,12 +4,37 @@ from rest_framework.response import Response
 from rest_framework.throttling import AnonRateThrottle
 from rest_framework.views import APIView
 from myst_api.models.contact import Contact
+from myst_api.throttles.contact_anon_throttle import ContactAnonThrottle
 
 
 class ContactView(APIView):
-    throttle_classes = [AnonRateThrottle]
+    """
+    API view to handle contact form submissions.
+    Allows users to submit their contact information and a message.
+    This view has the following functionality:
+
+    - POST: Accepts a contact form submission with email, full name, and message.
+
+    The view is rate-limited to prevent abuse.
+
+    Attributes:
+        throttle_classes (list): List of throttle classes to apply to this view.
+
+    @author: IFD
+    """
+    throttle_classes = [ContactAnonThrottle]
 
     def post(self, request) -> Response:
+        """
+        Handle POST requests to submit a contact form.
+        This method processes the contact form submission, validates the input,
+        saves the contact information to the database, and sends an email notification.
+
+        :param request:
+        :return:
+
+        @author: IFD
+        """
         email = request.data.get('email')
         full_name = request.data.get('full_name')
         message = request.data.get('message')

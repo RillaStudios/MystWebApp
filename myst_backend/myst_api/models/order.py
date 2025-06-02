@@ -9,12 +9,35 @@ from myst_api.enums.shipping_companies import ShippingCompanies
 from myst_api.models.customer import Customer
 from myst_api.models.product import Product
 
-
+# Generate a random 9-digit order ID
 def generate_order_id():
     return str(random.randint(100000000, 999999999))
 
 
 class Order(models.Model):
+    """
+    Represents an order in the system.
+
+    Attributes:
+        order_id (str): Unique identifier for the order, generated as a 9-digit random number.
+        payment_id (str): ID of the related payment, if any.
+        currency (str): Currency in which the order was placed.
+        shipping_company (str): Name of the shipping company used for delivery.
+        tracking_number (str): Tracking number for the shipment.
+        order_date (int): Timestamp of when the order was placed.
+        order_status (OrderStatus): Current status of the order.
+        payment_status (PaymentStatus): Current status of the payment for the order.
+        product (Product): The product associated with this order.
+        quantity (int): Quantity of the product ordered.
+        total_amount (Decimal): Total amount for the order.
+        customer (Customer): The customer who placed the order.
+
+    Methods:
+        __str__(): Returns a string representation of the order.
+        save(): Custom save method to handle status updates and email notifications.
+
+    @author: IFD
+    """
     # Order ID
     order_id = models.CharField(primary_key=True, max_length=9, unique=True, editable=False,
                                 default=generate_order_id)
@@ -48,6 +71,19 @@ class Order(models.Model):
         return f"Order {self.order_id} by {self.customer.customer_name}"
 
     def save(self, *args, **kwargs):
+        """
+        Custom save method to handle order status updates and send email notifications.
+        This method checks if the order status has changed, updates it accordingly,
+        and sends an email notification to the customer if necessary.
+        If the order is being updated, it checks if the status has changed and
+        only sends an email if the status has changed.
+
+        :param args:
+        :param kwargs:
+        :return:
+
+        @author: IFD
+        """
         status_changed = False
         previous = None
 

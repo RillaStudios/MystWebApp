@@ -10,7 +10,19 @@ from myst_api.models.product_image import ProductImage
 from myst_api.models.review import Review
 
 
-# Register your models here.
+"""
+Admin configuration for the Myst API application.
+This module registers models with the Django admin interface and customizes their behavior.
+
+It includes:
+    - ProductAdmin: Customizes the admin interface for Product, including inline management of ProductImage.
+    - OrderAdmin: Customizes the admin interface for Order, displaying order numbers and restricting permissions.
+    - CustomerAdmin: Restricts adding new customers.
+    - ContactAdmin: Restricts adding new contacts.
+    - ReviewAdmin: Restricts adding new reviews.
+
+@author: IFD
+"""
 class ProductImageInline(admin.TabularInline):
     model = ProductImage
     extra = 1

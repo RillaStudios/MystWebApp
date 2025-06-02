@@ -10,13 +10,27 @@ from myst_api.serializer.address_serializer import AddressSerializer
 from myst_api.serializer.customer_serializer import CustomerSerializer
 from myst_api.serializer.order_serializer import OrderSerializer
 from myst_api.serializer.product_serializer import ProductSerializer
+from myst_api.throttles.order_anon_throttle import OrderAnonThrottle
 
 
 class OrderView(APIView):
+    """
+    View to handle orders.
+    This view supports GET requests to retrieve order details.
+
+    @author: IFD
+    """
+    throttle_classes = [OrderAnonThrottle]
 
     def get(self, request):
         """
-        Returns a list of orders.
+        Returns an order based on the provided order ID.
+
+        @param request: The HTTP request object.
+
+        @return: A JSON response containing the order details, customer information, product details, and addresses.
+
+        @author: IFD
         """
         try:
             order_id = request.query_params.get('order_id', None)

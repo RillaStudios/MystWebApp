@@ -11,6 +11,14 @@ from myst_backend import settings
 
 
 class OrderService:
+    """
+    Service class for handling order-related operations.
+    This class provides methods to create orders based on Stripe checkout sessions.
+    It interacts with the Stripe API to retrieve session details and create corresponding
+    orders in the local database.
+
+    @author: IFD
+    """
 
     @classmethod
     def create_order(cls, session: dict) -> None:
@@ -18,19 +26,30 @@ class OrderService:
         Create a new order in the system.
         This method should handle the logic for creating an order,
         including any necessary validations and database interactions.
+
+        :param session: A dictionary containing the Stripe checkout session details.
+
+        :return: None if the order is created successfully, or raises an exception if there is an error.
+
+        @author: IFD
         """
         try:
 
+            # Initialize Stripe with the secret key
             session_id = session['id']
 
+            # If session_id is not provided, raise an exception
             if not session_id:
                 raise Exception('Session ID is required')
 
+            # Retrieve the Stripe checkout session
             session = stripe.checkout.Session.retrieve(session_id)
 
+            # If session is not found, raise an exception
             if not session:
                 raise Exception('Session not found')
 
+            # Check if the order already exists for this payment ID
             if Order.objects.filter(payment_id=session.payment_intent).exists():
                 raise Exception('Order already exists for this checkout session.')
 
@@ -69,8 +88,10 @@ class OrderService:
                 currency=session.currency
             )
 
+            # Save the order to the database
             order.save()
 
+            # Handle shipping address
             ship_address, ship_address_created = Address.objects.get_or_create(
                 customer=customer,
                 order=order,
@@ -129,6 +150,7 @@ class OrderService:
                 fail_silently=False,
             )
 
+            # Send notification email to admin
             send_mail(
                 subject='Myst - New Order Notification',
                 message=f'A new order has been created.\n\nOrder ID: {order.order_id}\nCustomer: {customer.customer_name} ({customer.customer_email})\nProduct: {line_item.product_name}\nQuantity: {quantity}\nTotal Amount: ${total_amount}\n\nTo update the status of this order visit the admin dashboard.',
@@ -136,8 +158,6 @@ class OrderService:
                 recipient_list=[settings.EMAIL_HOST_USER],
                 fail_silently=False,
             )
-
-            print('Order created successfully:', order.order_id)
 
             return None
 
@@ -150,8 +170,6 @@ class OrderService:
                     recipient_list=[settings.EMAIL_HOST_USER],
                     fail_silently=False,
                 )
-
-                print(f"Error creating order: {e}")
 
                 return None
             except Exception as e:

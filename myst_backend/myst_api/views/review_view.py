@@ -7,15 +7,31 @@ from myst_api.models.review import Review
 from myst_api.serializer.review_serializer import ReviewSerializer
 from no_profanity import ProfanityFilter
 
+from myst_api.throttles.review_anon_throttle import ReviewAnonThrottle
 from myst_backend import settings
 
 
 class ReviewView(APIView):
+    """
+    This view handles the review-related API endpoints.
+    It supports GET requests to retrieve the 5 most recent reviews
+    with a rating above 4 and allowed_on_page=True, and POST requests
+    to submit a new review for an order.
+
+    @author: IFD
+    """
+    throttle_classes = [ReviewAnonThrottle]
 
     def get(self, request):
         """
         Handle GET requests to retrieve the 5 most recent reviews
         with rating above 4 and allowed_on_page=True.
+
+        @param request: The HTTP request object.
+
+        @return: A JSON response containing the reviews or an error message if no reviews are found.
+
+        @author: IFD
         """
         reviews = Review.objects.filter(
             rating__gt=3,
@@ -33,6 +49,17 @@ class ReviewView(APIView):
         return Response(data, status=status.HTTP_200_OK)
 
     def post(self, request):
+        """
+        Handle POST requests to submit a new review for an order.
+        This method checks if the order exists, validates the review data,
+        and saves the review if valid. It also sends an email notification
+        to the site administrator about the new review.
+
+        :param request:
+        :return:
+
+        @author: IFD
+        """
 
         oid = request.data.get('order_id')
 

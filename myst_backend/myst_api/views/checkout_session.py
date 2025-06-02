@@ -6,11 +6,33 @@ from django.conf import settings
 from myst_api.models.order import Order
 from myst_api.models.product import Product
 from myst_api.service.price_conversion import convert_price
+from myst_api.throttles.checkout_session_anon_throttle import CheckoutSessionAnonThrottle
 
 stripe.api_key = settings.STRIPE_SECRET_KEY
 
 class CreateCheckoutSessionView(APIView):
+    """
+    View to handle Stripe Checkout Session creation and retrieval.
+    This view supports both GET and POST requests:
+
+    - GET: Retrieves an existing checkout session by session_id and returns its details.
+    - POST: Creates a new checkout session for a product with the specified quantity and currency.
+
+    @author: IFD
+    """
+    throttle_classes = [CheckoutSessionAnonThrottle]
+
     def get(self, request):
+        """
+        Get an existing Stripe Checkout Session by session_id.
+        This will also return the line items in the session and the
+        associated order ID if available.
+
+        :param request:
+        :return:
+
+        @author: IFD
+        """
 
         session_id = request.query_params.get('session_id')
         if not session_id:
@@ -39,6 +61,17 @@ class CreateCheckoutSessionView(APIView):
             return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
     def post(self, request):
+        """
+        Create a new Stripe Checkout Session for a product.
+        This endpoint expects a product_id, quantity, and currency in the request body.
+        It retrieves the product from the database, converts the price to the specified currency,
+        and creates a checkout session with the product details.
+
+        :param request:
+        :return:
+
+        @author: IFD
+        """
         try:
             # Assume the request contains a product_id and quantity
             product_id = request.data.get('product_id')

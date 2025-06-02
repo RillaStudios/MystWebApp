@@ -4,6 +4,30 @@ from myst_api.enums.address_type import AddressType
 
 
 class Address(models.Model):
+    """
+    Model representing an address associated with a customer or an order.
+    This model includes fields for the address details such as street address,
+    city, state/province, postal/zip code, country, and the type of address (e.g., billing, shipping).
+    It also includes foreign keys to link the address to a customer and optionally to an order.
+    The `AddressType` enum is used to define the type of address, ensuring that only valid types can be assigned.
+
+    Attributes:
+        address_id (AutoField): Unique identifier for the address.
+        customer (ForeignKey): Reference to the Customer model, linking the address to a customer.
+        order (ForeignKey): Optional reference to the Order model, linking the address to an order.
+        street_address_one (CharField): Primary street address.
+        street_address_two (CharField): Secondary street address, optional.
+        city (CharField): City of the address.
+        prov_state (CharField): State or province of the address.
+        postal_zip_code (CharField): Postal or zip code of the address.
+        country (CharField): Country of the address.
+        address_type (CharField): Type of address, using AddressType enum for validation.
+
+    Methods:
+        __str__(): Returns a string representation of the address, including the primary street address, city, state/province, and postal/zip code.
+
+    @author IFD
+    """
     address_id = models.AutoField(primary_key=True)
 
     # Foreign key to Customer model
