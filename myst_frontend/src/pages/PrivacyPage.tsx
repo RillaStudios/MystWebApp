@@ -2,6 +2,12 @@ import { Container, Title, Text, Divider } from "@mantine/core";
 import HeadFootLayout from "../layouts/HeadFootLayout";
 import { Helmet } from "react-helmet-async";
 
+/* 
+A React component for the Privacy Policy page of Myst Detailing.
+This page outlines how Myst Detailing collects, uses, and protects user data, in compliance with Canadian privacy laws.
+
+@author IFD
+*/
 export default function PrivacyPage() {
   return (
     <HeadFootLayout>

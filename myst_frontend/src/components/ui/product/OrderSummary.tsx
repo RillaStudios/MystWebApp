@@ -1,6 +1,12 @@
 import { Divider, Title, Image, Space, Text, Group } from "@mantine/core";
 import { type CheckoutContextValue } from "@stripe/react-stripe-js";
 
+/* 
+A React component that displays the order summary for a checkout process.
+This component shows the product image, name, quantity, subtotal, taxes, and total amount.
+
+@author IFD
+*/
 export default function OrderSummary({
   product_img_url,
   checkout,

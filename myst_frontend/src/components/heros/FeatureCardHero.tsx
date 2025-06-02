@@ -11,6 +11,8 @@ import {
 } from "@mantine/core";
 import classes from "../../css/FeatureCard.module.css";
 
+// Data structure for the features
+// Each feature includes a title, description, and an icon.
 const mockdata = [
   {
     title: "Deep cleaning power",
@@ -32,9 +34,17 @@ const mockdata = [
   },
 ];
 
+/* 
+A React component that displays a hero section with feature cards for the Myst Detailing website.
+This component showcases the key features of the Mystle product using cards with icons, titles, and descriptions.
+
+@author IFD
+*/
 export function FeaturesCardHero() {
+  // Use Mantine's theme for consistent styling
   const theme = useMantineTheme();
 
+  // Map over the mock data to create feature cards
   const features = mockdata.map((feature) => (
     <Card
       key={feature.title}

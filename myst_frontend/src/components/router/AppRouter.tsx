@@ -10,6 +10,13 @@ import CheckoutPage from "../../pages/CheckoutPage";
 import CheckoutSuccessPage from "../../pages/CheckoutSuccessPage";
 import TrackOrderPage from "../../pages/TrackOrderPage";
 
+/* 
+A React component that defines the main application router for the Myst Detailing website.
+This component sets up the routing for various pages including home, warranty,
+shipping, refund, terms, privacy, buy, checkout, checkout success, and track order pages.
+
+@author IFD
+*/
 export default function AppRouter() {
   return (
     <BrowserRouter>

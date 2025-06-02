@@ -2,6 +2,18 @@ import axios from "axios";
 import { MYST_AUTH_ENDPOINTS } from "../config/myst_api";
 import { notifications } from "@mantine/notifications";
 
+/* 
+A function to handle contact form submission.
+
+@param {Object} values - The contact form values.
+@param {string} values.email - The email address of the user.
+@param {string} values.name - The name of the user.
+@param {string} values.message - The message from the user.
+
+@return {Promise<void>} - A promise that resolves when the contact form is submitted successfully or rejects with an error.
+
+@author IFD
+*/
 export const handleContactSubmission = async (values: {
   email: string;
   name: string;

@@ -24,6 +24,7 @@ import { useCurrency } from "../context/CurrencyContext";
 import MystLogo from "../components/ui/logo";
 import { Helmet } from "react-helmet-async";
 
+// A type definition for the checkout session data structure
 type CheckoutSession = {
   session?: {
     status: string;
@@ -33,12 +34,34 @@ type CheckoutSession = {
   order_id?: number;
 };
 
+/* 
+A React component for the Checkout Success page of Myst Detailing.
+It retrieves the checkout session details from the URL, displays a confirmation message,
+and provides order summary information including order ID, date, customer details, and purchased items.
+
+@author IFD
+*/
 export default function CheckoutSuccessPage() {
+  // State to hold the checkout session details
   const [session, setSession] = useState<CheckoutSession>({});
+
+  // Hook to navigate programmatically
   const navigate = useNavigate();
+
+  // Hook to manage clipboard operations
   const clipboard = useClipboard();
+
+  // Hook to get the user's country from the currency context
   const { country } = useCurrency();
 
+  /* 
+  A useEffect hook that runs when the component mounts.
+  It retrieves the session ID from the URL parameters and fetches the checkout session status
+  from the server using Axios. If the session ID is not found, it logs an error and navigates to the home page.
+  If the session is successfully fetched, it updates the session state with the response data.
+
+  @author IFD
+  */
   useEffect(() => {
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
@@ -64,14 +87,17 @@ export default function CheckoutSuccessPage() {
       });
   }, []);
 
+  // If no session data is available, return null to avoid rendering
   if (!session.session) {
     return null;
   }
 
+  // If the session status is "open", redirect to the checkout page
   if (session.session.status === "open") {
     return <Navigate to="/checkout" />;
   }
 
+  // If the session status is "complete", render the confirmation page
   if (session.session.status === "complete") {
     return (
       <HeadFootLayout>

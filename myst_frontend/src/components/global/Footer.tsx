@@ -4,6 +4,12 @@ import classes from "../../css/Footer.module.css";
 import { HashLink } from "react-router-hash-link";
 import MystLogo from "../ui/logo";
 
+/* 
+Data structure for footer links
+Each group contains a title and an array of links.
+
+@author IFD
+*/
 const data = [
   {
     title: "Navigation",

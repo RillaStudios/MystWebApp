@@ -1,5 +1,11 @@
 import { createTheme } from "@mantine/core";
 
+/* 
+App Theme Configuration
+This file defines the theme for the application using Mantine's createTheme function.
+
+@author IFD
+*/
 export const appTheme = createTheme({
 
     //! APP COLORS

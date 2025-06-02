@@ -3,6 +3,19 @@ import { useState, useEffect } from "react";
 import MystBlackLogo from "../../assets/mystLogoBlack.png";
 import MystWhiteLogo from "../../assets/mystLogoWhite.png";
 
+/* 
+A React component that displays the Myst logo.
+This component supports both light and dark themes,
+and can render as a button or an image.
+
+@param {Object} props - The component props.
+@param {number} [props.width] - The width of the logo.
+@param {number} [props.height] - The height of the logo.
+@param {number} [props.size] - The size of the logo (either width or height).
+@param {boolean} [props.useButton=true] - Whether to render the logo as a button or an image.
+
+@author IFD
+*/
 export default function MystLogo({
   width,
   height,

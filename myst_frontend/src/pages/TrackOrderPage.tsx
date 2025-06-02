@@ -27,6 +27,7 @@ import { useCurrency } from "../context/CurrencyContext";
 import { useNavigate } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 
+// A type definition for the order details structure
 type OrderDetails = {
   order: {
     [key: string]: any;
@@ -43,15 +44,43 @@ type OrderDetails = {
 };
 
 export default function TrackOrderPage() {
+  // Order number state
   const [orderNumber, setOrderNumber] = useState("");
+
+  // Order error state
   const [orderError, setOrderError] = useState("");
+
+  // State to track if order details are in view
   const [orderInView, setOrderInView] = useState(false);
+
+  // State to hold the order details
   const [orderDetails, setOrderDetails] = useState<OrderDetails | null>(null);
+
+  // Mantine hooks for opening and closing the loading overlay
   const [visible, { open, close }] = useDisclosure(false);
+
+  // Hook to get the user's country from the currency context
   const { country } = useCurrency();
+
+  // Hook to navigate programmatically
   const navigate = useNavigate();
+
+  // Hook to manage clipboard operations
   const clipboard = useClipboard();
 
+  /* 
+  A function to validate the order number input.
+
+  It checks if the order number is empty, too short, or contains non-numeric characters.
+  If any validation fails, it sets an appropriate error message and returns false.
+  If validation passes, it clears the error message and returns true.
+
+  @param {string}
+
+  @return {boolean} - Returns true if the order number is valid, false otherwise.
+
+  @author IFD
+  */
   const validateOrderNumber = (number: string): boolean => {
     number = number.trim();
 
@@ -70,6 +99,20 @@ export default function TrackOrderPage() {
     }
   };
 
+  /* 
+  A function to handle the order tracking process.
+  It first validates the order number using the validateOrderNumber function.
+  If the validation fails, it returns early without proceeding further.
+  If the validation passes, it opens a loading overlay and makes an API call
+  to fetch the order details using the provided order number.
+  If the API call is successful, it sets the orderInView state to true and updates
+  the orderDetails state with the fetched data.
+  If the API call fails, it sets the orderInView state to false and displays an error notification
+  based on the error response. If the error is a 404, it shows a "Order Not Found" notification.
+  Finally, it closes the loading overlay.
+
+  @author IFD
+  */
   const handleTrackOrder = () => {
     if (!validateOrderNumber(orderNumber)) {
       return;
@@ -117,6 +160,16 @@ export default function TrackOrderPage() {
       });
   };
 
+  /* 
+  A function to get the color associated with an order status.
+  It takes a status string as input and returns a color string based on the status.
+
+  @param {string} status - The order status to get the color for.
+
+  @return {string} - Returns a color string corresponding to the order status.
+
+  @author IFD
+  */
   const getOrderStatusColor = (status: string) => {
     switch (status) {
       case "processing":
@@ -132,6 +185,16 @@ export default function TrackOrderPage() {
     }
   };
 
+  /* 
+  A function to get the shipping company name based on the company identifier.
+  It takes a company string as input and returns a formatted company name.
+
+  @param {string | null} company - The shipping company identifier.
+
+  @return {string} - Returns the formatted shipping company name or "N/A" if the company is null.
+
+  @author IFD
+  */
   const getShippingCompanyName = (company: string | null) => {
     if (!company) return "N/A";
 

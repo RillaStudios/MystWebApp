@@ -7,6 +7,12 @@ import {
   Title,
 } from "@mantine/core";
 
+/* 
+A React component that displays a video hero section for the Mystle Extractor Kit.
+This component includes a title, a description, and an embedded YouTube video showcasing the product in action.
+
+@author IFD
+*/
 export default function MystleVideoHero() {
   return (
     <Container maw={1200} mx="auto" pt={120}>

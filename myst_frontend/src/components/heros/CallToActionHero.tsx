@@ -12,9 +12,17 @@ import { HashLink } from "react-router-hash-link";
 import classes from "../../css/CallToActionHero.module.css";
 import BuyNowButton from "../ui/buttons/buy_now_button";
 
+/* 
+A React component that displays a call-to-action hero section for the Myst Detailing website.
+This component includes a title, a description, and buttons for purchasing and learning more about the Mystle product.
+
+@author IFD
+*/
 export function CallToActionHero() {
+  // Use Mantine's color scheme to determine if the theme is dark or light
   const { colorScheme } = useMantineColorScheme();
 
+  // Determine if the current color scheme is dark
   const isDark = colorScheme === "dark";
 
   return (

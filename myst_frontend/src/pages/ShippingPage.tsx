@@ -2,6 +2,12 @@ import { Container, Title, Text, Divider } from "@mantine/core";
 import HeadFootLayout from "../layouts/HeadFootLayout";
 import { Helmet } from "react-helmet-async";
 
+/* 
+A React component for the Shipping Policy page of Myst Detailing.
+This page outlines the shipping policy for the Car Extractor Kit, including processing times, shipping costs, order tracking, and delivery issues.
+
+@author IFD
+*/
 export default function ShippingPage() {
   return (
     <HeadFootLayout>

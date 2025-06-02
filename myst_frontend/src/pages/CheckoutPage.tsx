@@ -14,17 +14,41 @@ import { Helmet } from "react-helmet-async";
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY);
 
 export default function CheckoutPage() {
+  // Location state is used to pass product_id and quantity from the BuyPage
   const location = useLocation();
+
+  // Ensure that product_id and quantity are provided in the location state
   const { product_id, quantity } = location.state;
+
+  // Use currency context to get the current currency and loading state
   const { currency, loading } = useCurrency();
 
+  // Loading product state
   const [loadingProduct, setLoadingProduct] = useState(true);
+
+  // State to store the product
   const [product, setProduct] = useState<Product>();
+
+  // State to store the client secret for the Stripe Checkout session
   const [clientSecret, setClientSecret] = useState<string>("");
+
+  // Validate the client secret format
   const isValidClientSecret =
     clientSecret.startsWith("cs_") && clientSecret.includes("_secret_");
 
+  /* 
+  A useEffect hook to create a Stripe Checkout session when the 
+  component mounts or when dependencies change.
+
+  It sends a POST request to the server with the product ID, quantity,
+  and currency to create a checkout session, and updates the clientSecret state
+  with the response data. If an error occurs, it logs the error and sets
+  the clientSecret to an empty string.
+
+  @author IFD
+  */
   useEffect(() => {
+    // Ensure that loading is false and currency is available before making the request
     if (!loading && currency) {
       axios
         .post(MYST_AUTH_ENDPOINTS.CHECKOUT.CREATE_SESSION, {
@@ -38,9 +62,19 @@ export default function CheckoutPage() {
           setClientSecret("");
         });
     }
-    console.log("New Currency:", currency);
+    // Re-run this effect when loading, currency, product_id, or quantity changes
   }, [loading, currency, product_id, quantity]);
 
+  /* 
+  A useEffect hook to fetch the product details from the server
+  when the component mounts or when the product_id changes.
+
+  It sends a GET request to the server with the product_id to retrieve
+  the product details, and updates the product state with the response data.
+  If an error occurs, it logs the error to the console.
+
+  @author IFD
+  */
   useEffect(() => {
     setLoadingProduct(true);
 
@@ -57,10 +91,12 @@ export default function CheckoutPage() {
       });
   }, [product_id]);
 
+  // Define the appearance options for the Stripe Checkout
   const appearance: Appearance = {
     theme: "stripe",
   };
 
+  // Define the loader type for the Stripe Checkout
   const loader = "auto";
 
   return (

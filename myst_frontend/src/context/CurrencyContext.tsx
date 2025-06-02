@@ -4,6 +4,7 @@ import countryCurrencyMap from "../assets/currency/countryCodeCurrency.json";
 import axios from "axios";
 import { MYST_AUTH_ENDPOINTS } from "../config/myst_api";
 
+// A type definition for the context value
 type CurrencyContextType = {
   country: string;
   currency: string;
@@ -13,10 +14,12 @@ type CurrencyContextType = {
   format: (value: number) => string;
 };
 
+// Create a context for currency management
 const CurrencyContext = createContext<CurrencyContextType | undefined>(
   undefined,
 );
 
+// List of supported currencies derived from the countryCurrencyMap
 const SUPPORTED_CURRENCIES = [
   ...new Set(
     Object.values(countryCurrencyMap).map((item) =>
@@ -25,9 +28,18 @@ const SUPPORTED_CURRENCIES = [
   ),
 ].sort();
 
+// Default values for country and currency
 const DEFAULT_CURRENCY = "CAD";
 const DEFAULT_COUNTRY = "CA";
 
+/* 
+A React context provider for managing currency and country information.
+It fetches the user's country code and currency based on their IP address,
+and provides methods to change the country and currency, as well as format values in the selected currency.
+It also handles loading states and exchange rates for supported currencies.
+
+@author IFD
+*/
 export const CurrencyProvider = ({
   children,
 }: {

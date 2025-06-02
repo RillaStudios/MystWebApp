@@ -2,6 +2,12 @@ import { Container, Title, Text, Divider, Anchor } from "@mantine/core";
 import HeadFootLayout from "../layouts/HeadFootLayout";
 import { Helmet } from "react-helmet-async";
 
+/* 
+A React component for the Terms and Conditions page of Myst Detailing.
+This page outlines the terms of use for the Myst Detailing website and the purchase of the Car Extractor Kit.
+
+@author IFD
+*/
 export default function TermsPage() {
   return (
     <HeadFootLayout>

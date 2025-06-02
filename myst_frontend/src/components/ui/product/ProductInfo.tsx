@@ -3,6 +3,13 @@ import type { Product } from "../../../types/Product";
 import ProductQuantitySelect from "./ProductQuantitySelect";
 import BuyNowButton from "../buttons/buy_now_button";
 
+/* 
+A React component that displays product information for the Myst Detailing website.
+This component shows the product name, description, price, and a "Buy Now" button.
+It also includes a quantity selector when in checkout mode.
+
+@author IFD
+*/
 export default function ProductInfo({
   product,
   checkout = false,

@@ -9,6 +9,13 @@ import ProductInfo from "../ui/product/ProductInfo";
 import { useNavigate } from "react-router-dom";
 import { notifications } from "@mantine/notifications";
 
+/* 
+A React component that displays a product hero section for the Myst Detailing website.
+This component fetches product details based on the provided product ID,
+displays the product information, and allows users to view product images and purchase options.
+
+@author IFD
+*/
 export default function ProductHero({
   checkout,
   product_id,
@@ -16,13 +23,32 @@ export default function ProductHero({
   checkout?: boolean;
   product_id: number;
 }) {
+  // Use the currency context to get the current exchange rate and currency
   const { rate, currency, loading } = useCurrency();
+
+  // Hook to navigate programmatically
   const navigate = useNavigate();
+
+  // State to manage product loading and details
   const [loadingProduct, setLoadingProduct] = useState(true);
+
+  // State to hold the formatted price and quantity
   const [price, setPrice] = useState("");
+
+  // State to hold the quantity of the product
   const [quantity, setQuantity] = useState<string | number>("1");
+
+  // State to hold the product details
   const [product, setProduct] = useState<Product>();
 
+  /* 
+  A useEffect hook that runs when the component mounts or when the product_id changes.
+  It fetches the product details from the server using Axios.
+  If the product is not found, it navigates to the home page and shows an error notification.
+  If the product is found, it updates the product state with the fetched data.
+
+  @author IFD
+  */
   useEffect(() => {
     setLoadingProduct(true);
 
@@ -50,7 +76,15 @@ export default function ProductHero({
       });
   }, [product_id]);
 
-  // Price state
+  /* 
+  A useEffect hook that runs when the component mounts or when the loading state,
+  rate, currency, quantity, or loadingProduct changes.
+  It calculates the price in the local currency based on the exchange rate,
+  product price, and quantity. It formats the price using the 
+  Intl.NumberFormat API and updates the price state.
+
+  @author IFD
+  */
   useEffect(() => {
     // Fetch the exchange rate for the new currency
     // and update the rate state

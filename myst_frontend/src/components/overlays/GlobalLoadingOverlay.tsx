@@ -1,12 +1,21 @@
-import { LoadingOverlay, Text, Box, Stack } from '@mantine/core';
+import { LoadingOverlay, Text, Box, Stack } from "@mantine/core";
 
+// A type definition for the props of the GlobalLoadingOverlay component
 interface GlobalLoadingOverlayProps {
   visible: boolean;
   message?: string;
 }
 
-export function GlobalLoadingOverlay({ visible, message }: GlobalLoadingOverlayProps) {
+/* 
+A React component that displays a global loading overlay.
+This component shows a full-screen loading overlay with an optional message.
 
+@author IFD
+*/
+export function GlobalLoadingOverlay({
+  visible,
+  message,
+}: GlobalLoadingOverlayProps) {
   return (
     <>
       {visible && (
@@ -35,7 +44,9 @@ export function GlobalLoadingOverlay({ visible, message }: GlobalLoadingOverlayP
               right={0}
               style={{ zIndex: 2001 }}
             >
-              <Text c="white" fw="lighter" fs="normal">{message}</Text>
+              <Text c="white" fw="lighter" fs="normal">
+                {message}
+              </Text>
             </Stack>
           )}
         </Box>

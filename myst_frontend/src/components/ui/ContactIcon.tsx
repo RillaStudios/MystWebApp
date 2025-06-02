@@ -2,6 +2,7 @@ import { IconAt, IconSun } from "@tabler/icons-react";
 import { Box, Stack, Text } from "@mantine/core";
 import classes from "../../css/ContactIcons.module.css";
 
+// A type definition for the props of the ContactIcon component
 interface ContactIconProps
   extends Omit<React.ComponentPropsWithoutRef<"div">, "title"> {
   icon: typeof IconSun;
@@ -9,6 +10,12 @@ interface ContactIconProps
   description: React.ReactNode;
 }
 
+/* 
+A React component that displays a contact icon with a title and description.
+This component is used to show contact information such as email, phone, or address.
+
+@author IFD
+*/
 function ContactIcon({
   icon: Icon,
   title,

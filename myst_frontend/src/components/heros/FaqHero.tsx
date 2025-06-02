@@ -2,6 +2,7 @@ import { IconPlus } from "@tabler/icons-react";
 import { Accordion, Anchor, Container, ThemeIcon, Title } from "@mantine/core";
 import classes from "../../css/Faq.module.css";
 
+// Question and Answer data structure
 const qaOne = {
   question: "Do you ship worldwide?",
   answer:
@@ -68,6 +69,12 @@ const qaFive = {
     "Yes — Myst is built for both indoor and outdoor use. Whether you're deep-cleaning a car interior, refreshing patio furniture, or tackling tough spots inside your home, Myst handles it all with high-pressure misting and strong suction.",
 };
 
+/* 
+A React component that displays a FAQ section with a background gradient.
+This component uses Mantine's Accordion for collapsible FAQ items and custom styles for a visually appealing layout.
+
+@author IFD
+*/
 export function FaqWithBg() {
   return (
     <div className={classes.wrapper}>

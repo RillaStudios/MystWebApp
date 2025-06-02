@@ -1,6 +1,12 @@
 import { Box, Center, Container, Image, Text, Title } from "@mantine/core";
 import CanadaLeaf from "../../assets/canada_leaf.png";
 
+/* 
+A React component that displays a hero section for the "Assembled in Canada" message.
+This component includes an image of the Canada leaf, a title, and a description text.
+
+@author IFD
+*/
 export default function AssembledInCanHero() {
   return (
     <Box>

@@ -2,6 +2,12 @@ import { Container, Title, Text, Divider } from "@mantine/core";
 import HeadFootLayout from "../layouts/HeadFootLayout";
 import { Helmet } from "react-helmet-async";
 
+/* 
+A React component for the Refund Policy page of Myst Detailing.
+This page outlines the refund policy for the Car Extractor Kit, including conditions for refunds, exceptions, and how to request a refund.
+
+@author IFD
+*/
 export default function RefundPage() {
   return (
     <HeadFootLayout>

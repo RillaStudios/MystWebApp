@@ -17,12 +17,20 @@ import { Link } from "react-router-dom";
 import CountryPicker from "../ui/CountryPicker";
 import { HashLink } from "react-router-hash-link";
 
+// Hardcoded links for the header navigation
 const links = [
   { link: "/", label: "Home" },
   { link: "/#mystle", label: "Mystle" },
   { link: "/#contact", label: "Contact" },
 ];
 
+/* 
+A React component for the header of the Myst Detailing website.
+This header includes navigation links, a logo, a theme toggle button, and a country picker.
+It features a responsive design with a drawer for mobile view, allowing users to navigate the site easily.
+
+@author IFD
+*/
 export function Header() {
   const [drawerOpened, { toggle: toggleDrawer, close: closeDrawer }] =
     useDisclosure(false);

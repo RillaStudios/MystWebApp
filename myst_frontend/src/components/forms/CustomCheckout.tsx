@@ -55,10 +55,14 @@ export default function CustomCheckout({
 
   // Email input state management
   const [email, setEmail] = useState("");
+
+  // Email error state management
   const [emailError, setEmailError] = useState<string | null>(null);
 
+  // Loading overlay state management
   const [visible, { open, close }] = useDisclosure(false);
 
+  // Shipping and billing address state management
   const [shippingAddress, setShippingAddress] = useState<{
     address: {
       line1: string;
@@ -81,6 +85,7 @@ export default function CustomCheckout({
     name: "",
   });
 
+  // Billing address state management
   const [billingAddress, setBillingAddress] = useState<{
     address: {
       line1: string;
@@ -103,11 +108,11 @@ export default function CustomCheckout({
     name: "",
   });
 
+  // State to track if the shipping and billing addresses are complete
   const [shippingAddressComplete, setShippingAddressComplete] = useState(false);
   const [billingAddressComplete, setBillingAddressComplete] = useState(false);
 
-  //
-
+  // State to track if the billing address is the same as the shipping address
   const [sameAsShipping, setSameAsShipping] = useState(true);
 
   /* 

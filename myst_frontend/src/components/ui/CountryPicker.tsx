@@ -12,11 +12,22 @@ import { IconWorld } from "@tabler/icons-react";
 import { useVirtualizer } from "@tanstack/react-virtual";
 import { useCurrency } from "../../context/CurrencyContext";
 
+/* 
+A React component that provides a country picker with a dropdown menu.
+This component allows users to select a country, which updates the associated currency.
+It uses a virtualized list for performance with many options and displays flags for each country.
+
+@author IFD
+*/
 export default function CountryPicker() {
+  // Import the currency context to get country and currency information
   const { country, currency, changeCountryAndCurrency } = useCurrency();
 
+  // Create a ref to the parent element for virtualized scrolling
   const parentRef = useRef(null);
 
+  // Create a memoized list of countries and their associated currencies
+  // This list is derived from the countryCurrencyMap JSON file
   const countryList = useMemo(() => {
     return Object.entries(countryCurrencyMap).map(
       ([countryCode, { Currency }]) => ({
@@ -26,6 +37,8 @@ export default function CountryPicker() {
     );
   }, []);
 
+  // Initialize the combobox with a custom onDropdownOpen handler
+  // This handler selects the active option when the dropdown is opened via keyboard
   const combobox = useCombobox({
     onDropdownOpen: (eventSource) => {
       if (eventSource === "keyboard") {
@@ -36,18 +49,22 @@ export default function CountryPicker() {
     },
   });
 
+  // State to manage the selected value in the combobox
   const [value, setValue] = useState("");
 
+  // Effect to set the initial value of the combobox based on the current country
   useEffect(() => {
     setValue(country);
   }, [country]);
 
+  // Create a virtualizer to efficiently render the list of countries
   const rowVirtualizer = useVirtualizer({
     count: countryList.length,
     getScrollElement: () => parentRef.current,
     estimateSize: () => 40, // each option row is ~40px
   });
 
+  // Generate the options for the combobox dropdown
   const cbxOptions = countryList.map(({ countryCode, currencyCode }) => (
     <Combobox.Option
       value={countryCode}
@@ -67,8 +84,10 @@ export default function CountryPicker() {
     </Combobox.Option>
   ));
 
+  // Check if the selected value has a corresponding flag in the country list
   const hasFlag = countryList.some(({ countryCode }) => countryCode === value);
 
+  // Determine the left section of the combobox target based on whether a flag exists
   const leftSection = hasFlag ? (
     <img
       src={`/flags/${value}.svg`}

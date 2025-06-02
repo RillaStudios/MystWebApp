@@ -9,6 +9,12 @@ import ProductHero from "../components/heros/ProductHero";
 import ReviewHero from "../components/heros/ReviewHero";
 import { Helmet } from "react-helmet-async";
 
+/* 
+A React component for the Home page of Myst Detailing.
+This page serves as the landing page for the Myst Detailing website, showcasing the car extractor kit and its features.
+
+@author IFD
+*/
 export default function HomePage() {
   return (
     <>

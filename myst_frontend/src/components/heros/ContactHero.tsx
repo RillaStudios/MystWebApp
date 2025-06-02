@@ -15,9 +15,17 @@ import classes from "../../css/Contact.module.css";
 import { handleContactSubmission } from "../../service/contact_service";
 import { useDisclosure } from "@mantine/hooks";
 
+/* 
+A React component that displays a contact form for users to reach out with inquiries.
+This component includes fields for email, name, and message, along with validation.
+
+@author IFD
+*/
 export function ContactHero() {
+  // Mantine's useDisclosure hook to manage the loading state
   const [visible, { open, close }] = useDisclosure(false);
 
+  // Mantine's useForm hook to manage form state and validation
   const form = useForm({
     mode: "uncontrolled",
     initialValues: {

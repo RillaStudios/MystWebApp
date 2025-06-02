@@ -2,6 +2,12 @@ import { Container, Title, Text, Divider } from "@mantine/core";
 import HeadFootLayout from "../layouts/HeadFootLayout";
 import { Helmet } from "react-helmet-async";
 
+/* 
+A React component for the Warranty page of Myst Detailing.
+This page provides details about the warranty coverage for the Myst Detailing Car Extractor Kit, including what is covered, how to make a claim, and limitations.
+
+@author IFD
+*/
 export default function WarrantyPage() {
   return (
     <HeadFootLayout>

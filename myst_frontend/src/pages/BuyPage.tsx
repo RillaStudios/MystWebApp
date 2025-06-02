@@ -2,6 +2,13 @@ import HeadFootLayout from "../layouts/HeadFootLayout";
 import ProductHero from "../components/heros/ProductHero";
 import { Helmet } from "react-helmet-async";
 
+/* 
+A React component for the Buy page of Myst Detailing, allowing users to purchase the car extractor kit.
+Note that this is not the checkout page, but rather a page where users can select the quantity of the
+product they wish to buy before proceeding to checkout.
+
+@author IFD
+*/
 export default function BuyPage({ product_id }: { product_id?: number }) {
   // Default product_id to 1 if not provided
   product_id = product_id || 1;

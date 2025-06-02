@@ -1,6 +1,12 @@
 export const MYST_API_BASE_URL = import.meta.env.VITE_API_URL;
 
-// Specific API endpoints
+/* 
+A configuration file for the Myst API endpoints.
+This file contains the base URL for the API and various endpoints for different functionalities such 
+as contact submission, product retrieval, checkout session management, currency exchange rates, order retrieval, and review submission.
+
+@author IFD
+*/
 export const MYST_AUTH_ENDPOINTS = {
     CONTACT: {
         SUBMIT: `${MYST_API_BASE_URL}/contact/`,

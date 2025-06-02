@@ -10,6 +10,13 @@ import {
 import classes from "../../css/Comment.module.css";
 import { IconRosetteDiscountCheckFilled } from "@tabler/icons-react";
 
+/* 
+A React component that displays a comment section for product reviews.
+This component includes the reviewer's name, review text, rating, and the date of the review.
+It is styled using Mantine's Paper, Group, and Typography components.
+
+@author IFD
+*/
 export function Comment({
   reviewerName,
   reviewText,
