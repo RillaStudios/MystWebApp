@@ -1,28 +1,28 @@
 import { notifications } from "@mantine/notifications";
+import type { CheckoutContextValue } from "@stripe/react-stripe-js";
+import type { StripeCheckoutConfirmResult } from "@stripe/stripe-js";
 
-export const nextStep = (active: number, setActive: (value: number | ((prevState: number) => number)) => void, email: string) => {
-    if (active === 0) {
-      if (!email) {
-        notifications.show({
-          title: "Missing Email",
-          message: "Please fill in email field.",
-          color: "red",
-        });
-        return;
-      } else {
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if (!emailRegex.test(email)) {
-          notifications.show({
-            title: "Invalid Email",
-            message: "Please enter a valid email address.",
-            color: "red",
-          });
-          return;
-        }
-      }
-    }
-    setActive((current) => (current < 4 ? current + 1 : current));
-  };
+export const validateEmail = (email: string): boolean => {
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return emailRegex.test(email);
+}
 
-  export const prevStep = (setActive: (value: number | ((prevState: number) => number)) => void) =>
-    setActive((current) => (current > 0 ? current - 1 : current));
+export const proccessCheckout = async (
+   checkout: CheckoutContextValue) => {
+
+  const result: StripeCheckoutConfirmResult = await checkout.confirm({
+    returnUrl: `${window.location.origin}/checkout/success?session_id=${checkout.id}`,
+  });
+
+  if (result.type === "error") {
+    console.error(result.error);
+
+      notifications.show({
+        title: "Payment Error",
+        message: result.error.message || "Your card was declined. Please try again.",
+        color: "red",
+        position: "bottom-center",
+      });
+  }
+
+}

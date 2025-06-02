@@ -1,112 +1,239 @@
-import React, { useEffect, useState } from "react";
 import {
-  useCheckout,
-  PaymentElement,
   AddressElement,
+  PaymentElement,
+  useCheckout,
 } from "@stripe/react-stripe-js";
-import type { StripeCheckoutConfirmResult } from "@stripe/stripe-js";
-import HeadFootLayout from "../../layouts/HeadFootLayout";
 import {
+  Box,
   Button,
+  Center,
+  Checkbox,
   Container,
   Divider,
   Grid,
   Group,
+  Loader,
+  LoadingOverlay,
   Space,
   Stepper,
-  Title,
-  Text,
-  Image,
   TextInput,
-  Checkbox,
+  Title,
 } from "@mantine/core";
-import axios from "axios";
-import { MYST_AUTH_ENDPOINTS } from "../../config/myst_api";
+import OrderSummary from "../ui/product/OrderSummary";
+import {
+  proccessCheckout,
+  validateEmail,
+} from "../../service/checkout_service";
+import { useState } from "react";
 import { notifications } from "@mantine/notifications";
+import { useDisclosure } from "@mantine/hooks";
 
+/* 
+A custom checkout component that integrates with Stripe's Checkout API.
+It allows users to enter their email, shipping address, billing address,
+and payment details in a step-by-step manner.
+
+It uses Stripe's AddressElement and PaymentElement components
+to handle address and payment information securely.
+
+It also includes a summary of the order on the right side of the page.
+
+@author IFD
+@since 2025-05-27
+*/
 export default function CustomCheckout({
   product_img_url,
 }: {
   product_img_url?: string;
+  product_id: number;
 }) {
+  // Checkout state management
   const checkout = useCheckout();
-  const [sameAsShipping, setSameAsShipping] = useState(true);
+
+  // Stepper state management
   const [active, setActive] = useState(0);
 
-  const nextStep = () => {
+  // Email input state management
+  const [email, setEmail] = useState("");
+  const [emailError, setEmailError] = useState<string | null>(null);
+
+  const [visible, { open, close }] = useDisclosure(false);
+
+  const [shippingAddress, setShippingAddress] = useState<{
+    address: {
+      line1: string;
+      line2: string | null;
+      city: string;
+      state: string;
+      postal_code: string;
+      country: string;
+    };
+    name: string;
+  }>({
+    address: {
+      line1: "",
+      line2: "",
+      city: "",
+      state: "",
+      postal_code: "",
+      country: "CA",
+    },
+    name: "",
+  });
+
+  const [billingAddress, setBillingAddress] = useState<{
+    address: {
+      line1: string;
+      line2: string | null;
+      city: string;
+      state: string;
+      postal_code: string;
+      country: string;
+    };
+    name: string;
+  }>({
+    address: {
+      line1: "",
+      line2: "",
+      city: "",
+      state: "",
+      postal_code: "",
+      country: "CA",
+    },
+    name: "",
+  });
+
+  const [shippingAddressComplete, setShippingAddressComplete] = useState(false);
+  const [billingAddressComplete, setBillingAddressComplete] = useState(false);
+
+  //
+
+  const [sameAsShipping, setSameAsShipping] = useState(true);
+
+  /* 
+  A function to handle the next step in the checkout process.
+  It increments the active step in the stepper, 
+  ensuring it does not exceed the maximum step count (3 in this case).
+
+  @author IFD
+  @since 2025-05-27
+  */
+  const nextStep = async () => {
     if (active === 0) {
-      const { email } = personalInfo;
-      if (!email) {
+      if (!validateEmail(email)) {
+        setEmailError("Email address is not valid.");
+        return;
+      }
+
+      try {
+        await checkout.updateEmail(email);
+      } catch (error) {
+        console.error("Error updating email:", error);
+      }
+
+      console.log(checkout.total.total.amount);
+
+      // Proceed to the next step
+      setActive((current) => (current < 2 ? current + 1 : current));
+    } else if (active === 1) {
+      // Custom validation logic for shipping address here
+      if (!shippingAddressComplete) {
         notifications.show({
-          title: "Missing Email",
-          message: "Please fill in email field.",
+          title: "Shipping address incomplete",
+          message: "Please complete your shipping address.",
           color: "red",
+          position: "bottom-center",
         });
         return;
       } else {
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if (!emailRegex.test(email)) {
-          notifications.show({
-            title: "Invalid Email",
-            message: "Please enter a valid email address.",
-            color: "red",
-          });
-          return;
+        await checkout.updateShippingAddress(shippingAddress);
+
+        if (sameAsShipping) {
+          setBillingAddress(shippingAddress);
+          await checkout.updateBillingAddress(shippingAddress);
+        } else {
+          if (!billingAddressComplete) {
+            notifications.show({
+              title: "Billing address incomplete",
+              message: "Please complete your billing address.",
+              color: "red",
+              position: "bottom-center",
+            });
+            return;
+          } else {
+            await checkout.updateBillingAddress(billingAddress);
+          }
         }
       }
+
+      setActive((current) => (current < 2 ? current + 1 : current));
     }
-    setActive((current) => (current < 4 ? current + 1 : current));
   };
 
+  /* 
+  A function to handle the previous step in the checkout process.
+  It decrements the active step in the stepper,
+  ensuring it does not go below 0.
+
+  @author IFD
+  @since 2025-05-27
+  */
   const prevStep = () =>
     setActive((current) => (current > 0 ? current - 1 : current));
 
-  if (!checkout) {
-    return <div>Loading...</div>;
-  }
+  /* 
+  A function to handle key down events in the form.
+  It listens for the "Enter" key press and prevents the default form submission behavior,
+  allowing the next step in the checkout process to be triggered instead.
 
-  useEffect(() => {
-    axios
-      .get(MYST_AUTH_ENDPOINTS.PRODUCT.GET_BY_ID(1))
-      .then((response) => {
-        // You can use the product data here if needed
-        console.log("Product data:", response.data);
-      })
-      .catch((error) => {
-        console.error("Error fetching product data:", error);
-        // Handle the error (e.g., show an error message to the user)
-      });
-  }, [checkout.lineItems[0].id]);
-
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-
-    const result: StripeCheckoutConfirmResult = await checkout.confirm();
-
-    if (result.type === "error") {
-      console.error(result.error);
-      // Handle the error (e.g., show an error message to the user)
-    } else {
-      // Payment succeeded
-      console.log("Payment succeeded");
-      // Handle successful payment (e.g., show a success message, redirect to a confirmation page)
+  @author IFD
+  @since 2025-05-27
+  */
+  const handleKeyDown = async (event: React.KeyboardEvent) => {
+    if (event.key === "Enter") {
+      event.preventDefault();
+      if (active < 2) {
+        nextStep();
+      }
     }
   };
 
-  const [personalInfo, setPersonalInfo] = useState({
-    email: "",
-  });
+  // If no checkout object is available, show a loading indicator
+  // This can happen if the Stripe Checkout context is not properly initialized
+  // or if the component is rendered before the Stripe elements are ready.
+  if (!checkout) {
+    return (
+      <Center style={{ height: "100vh" }}>
+        <Loader size={"lg"} type="dots" c={"primary"} />
+      </Center>
+    );
+  }
 
-  const handlePersonalInfoChange = (field: string, value: string) => {
-    setPersonalInfo((prev) => ({ ...prev, [field]: value }));
-  };
-
+  // Render the checkout form with a stepper for navigation
+  // It includes steps for entering personal details, address details, and payment method.
   return (
-    <HeadFootLayout>
-      <Container py={50} size={"lg"}>
-        <Grid gutter="xl">
-          <Grid.Col span={{ base: 12, md: 7 }}>
-            <form onSubmit={handleSubmit}>
+    <Container py={50} size={"lg"}>
+      <Grid gutter="xl">
+        <Grid.Col span={{ base: 12, md: 7 }}>
+          <Box pos="relative">
+            <LoadingOverlay
+              visible={visible}
+              zIndex={1000}
+              overlayProps={{ radius: "sm", blur: 2 }}
+              loaderProps={{ size: "xl", color: "primary", type: "dots" }}
+            />
+            <form
+              onSubmit={async (event) => {
+                event.preventDefault();
+
+                open(); // Show loading overlay
+
+                await proccessCheckout(checkout);
+
+                close(); // Hide loading overlay
+              }}
+              onKeyDown={handleKeyDown}
+            >
               <Title order={3}>Complete Your Purchase</Title>
               <Divider mb={"sm"} />
               <Space h="lg" />
@@ -118,7 +245,7 @@ export default function CustomCheckout({
                 allowNextStepsSelect={false}
               >
                 {/* Personal Details */}
-                <Stepper.Step label="Contact Info">
+                <Stepper.Step label="Contact">
                   <Title order={3} mb={"sm"} mt={"lg"}>
                     Enter Your Email
                   </Title>
@@ -126,22 +253,19 @@ export default function CustomCheckout({
                     <TextInput
                       label="Email"
                       placeholder="Enter your email"
-                      value={personalInfo.email}
-                      onChange={(e) => {
-                        handlePersonalInfoChange(
-                          "email",
-                          e.currentTarget.value,
-                        );
+                      value={email}
+                      error={emailError}
+                      onChange={(event) => {
+                        setEmail(event.currentTarget.value);
+                        setEmailError(null);
                       }}
                       required
-                      type="email"
-                      className="email-input"
                     />
                   )}
                 </Stepper.Step>
 
                 {/* Address Details */}
-                <Stepper.Step label="Shipping">
+                <Stepper.Step label="Address">
                   <Title order={3} mb={"sm"} mt={"lg"}>
                     Shipping Address
                   </Title>
@@ -151,6 +275,16 @@ export default function CustomCheckout({
                         key="shipping"
                         options={{
                           mode: "shipping",
+                        }}
+                        onChange={function (event) {
+                          setShippingAddressComplete(event.complete);
+
+                          if (event.complete) {
+                            setShippingAddress({
+                              address: event.value.address,
+                              name: event.value.name,
+                            });
+                          }
                         }}
                       />
 
@@ -179,6 +313,16 @@ export default function CustomCheckout({
                             options={{
                               mode: "billing",
                             }}
+                            onChange={function (event) {
+                              setBillingAddressComplete(event.complete);
+
+                              if (event.complete) {
+                                setBillingAddress({
+                                  address: event.value.address,
+                                  name: event.value.name,
+                                });
+                              }
+                            }}
                           />
                         </>
                       )}
@@ -191,7 +335,27 @@ export default function CustomCheckout({
                   <Title order={3} mb={"sm"} mt={"lg"}>
                     Payment Method
                   </Title>
-                  {active === 2 && <PaymentElement key="payment" />}
+                  {active === 2 && (
+                    <PaymentElement
+                      key="payment"
+                      options={{
+                        fields: {
+                          billingDetails: {
+                            name: "never",
+                            phone: "never",
+                            address: {
+                              line1: "never",
+                              line2: "never",
+                              city: "never",
+                              state: "never",
+                              postalCode: "never",
+                              country: "never",
+                            },
+                          },
+                        },
+                      }}
+                    />
+                  )}
                 </Stepper.Step>
 
                 {/* Confirmation */}
@@ -200,43 +364,29 @@ export default function CustomCheckout({
                 </Stepper.Completed>
               </Stepper>
 
+              {/* Stepper Navigation */}
               <Group justify="center" mt="xl">
                 {active > 0 && (
                   <Button variant="outline" onClick={prevStep}>
                     Back
                   </Button>
                 )}
-                <Button onClick={nextStep}>Next step</Button>
+                <Button
+                  key={`next-step-${active}`}
+                  onClick={active !== 2 ? nextStep : undefined}
+                  type={active === 2 ? "submit" : "button"}
+                >
+                  {active === 2 ? "Place Order" : "Next step"}
+                </Button>
               </Group>
             </form>
-          </Grid.Col>
-          <Grid.Col span={{ base: 12, md: 5 }}>
-            <Title order={3}>Order Summary</Title>
-            <Divider mb={"sm"} />
-            <Image
-              src={product_img_url || "images/no_prod_image.jpeg"}
-              alt="Product Image"
-              mb="md"
-              radius={"md"}
-            />
-            <Text>
-              {checkout.lineItems[0].name} x {checkout.lineItems[0].quantity}
-            </Text>
-            <Space h="xs" />
-            <Divider mb="md" />
-            <Text>Subtotal: {checkout.total.subtotal.amount}</Text>
-            <Space h="xs" />
-            <Text>
-              Tax:{" "}
-              {checkout.total.taxExclusive.amount + checkout.tax.status ||
-                "0.00"}
-            </Text>
-            <Space h="xs" />
-            <Divider mb="md" />
-            <Text>Total: {checkout.total.total.amount}</Text>
-          </Grid.Col>
-        </Grid>
-      </Container>
-    </HeadFootLayout>
+          </Box>
+        </Grid.Col>
+        <Grid.Col span={{ base: 12, md: 5 }}>
+          {/* Order Summary Component */}
+          <OrderSummary product_img_url={product_img_url} checkout={checkout} />
+        </Grid.Col>
+      </Grid>
+    </Container>
   );
 }

@@ -2,6 +2,7 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import countryCurrencyMap from "../assets/currency/countryCodeCurrency.json";
 import axios from "axios";
+import { MYST_AUTH_ENDPOINTS } from "../config/myst_api";
 
 type CurrencyContextType = {
   country: string;
@@ -143,12 +144,11 @@ export const CurrencyProvider = ({
     }
 
     axios
-      .get(`https://api.frankfurter.app/latest?from=CAD&to=${currency}`)
+      .get(`${MYST_AUTH_ENDPOINTS.CURERENCY.GET_EXCHANGE_RATE(currency)}`)
       .then((res) => {
         // Extract the rate for the requested currency from the rates object
-        const exchangeRate = res.data.rates[currency];
+        const exchangeRate = res.data;
         setRate(exchangeRate || 1);
-        console.log("Exchange rate:", exchangeRate);
       })
       .catch((err: unknown) => {
         if (axios.isAxiosError(err)) {

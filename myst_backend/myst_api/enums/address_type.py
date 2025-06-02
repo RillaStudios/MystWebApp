@@ -2,5 +2,5 @@ import enum
 
 class AddressType(enum.Enum):
 
-    RESIDENTIAL = "Residential"
-    COMMERCIAL = "Commercial"
+    SHIPPING = "shipping"
+    BILLING = "billing"

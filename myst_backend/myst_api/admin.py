@@ -3,9 +3,12 @@ from django.http import HttpResponseRedirect
 from django.urls import reverse
 
 from myst_api.models.contact import Contact
+from myst_api.models.customer import Customer
 from myst_api.models.order import Order
 from myst_api.models.product import Product
 from myst_api.models.product_image import ProductImage
+from myst_api.models.review import Review
+
 
 # Register your models here.
 class ProductImageInline(admin.TabularInline):
@@ -32,6 +35,36 @@ class ProductAdmin(admin.ModelAdmin):
     def has_delete_permission(self, request, obj=None):
         return False
 
-admin.site.register(Contact)
-admin.site.register(Order)
+class OrderAdmin(admin.ModelAdmin):
+    list_display = ['order_number_display']
+
+    def order_number_display(self, obj):
+        return f"Order #{obj.order_id}"
+    order_number_display.short_description = "Order"
+
+
+    def get_readonly_fields(self, request, obj=None):
+        editable = ['shipping_company', 'order_status', 'tracking_number']
+        all_fields = [f.name for f in Order._meta.fields]
+        return [f for f in all_fields if f not in editable]
+
+    def has_add_permission(self, request):
+        return False
+
+class CustomerAdmin(admin.ModelAdmin):
+    def has_add_permission(self, request):
+        return False
+
+class ContactAdmin(admin.ModelAdmin):
+    def has_add_permission(self, request):
+        return False
+
+class ReviewAdmin(admin.ModelAdmin):
+    def has_add_permission(self, request):
+        return False
+
+admin.site.register(Order, OrderAdmin)
+admin.site.register(Customer, CustomerAdmin)
+admin.site.register(Contact, ContactAdmin)
 admin.site.register(Product, ProductAdmin)
+admin.site.register(Review, ReviewAdmin)

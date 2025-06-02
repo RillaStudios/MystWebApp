@@ -1,9 +1,43 @@
 import { Container, Title, Text, Divider } from "@mantine/core";
 import HeadFootLayout from "../layouts/HeadFootLayout";
+import { Helmet } from "react-helmet-async";
 
 export default function PrivacyPage() {
   return (
     <HeadFootLayout>
+      <Helmet>
+        <title>Myst Detailing | Privacy Policy</title>
+        <meta
+          name="description"
+          content="Read the privacy policy of Myst Detailing. Learn how we collect, use, and protect your personal information when you use our website and services."
+        />
+        <meta
+          name="keywords"
+          content="
+              privacy policy, data protection, personal information, Myst Detailing,
+              user privacy, Canada privacy laws, car detailing website privacy
+            "
+        />
+        <meta name="robots" content="index, follow" />
+        <link rel="canonical" href="https://mystdetailing.ca/privacy-policy" />
+
+        {/* Open Graph */}
+        <meta property="og:type" content="website" />
+        <meta
+          property="og:url"
+          content="https://mystdetailing.ca/privacy-policy"
+        />
+        <meta property="og:title" content="Myst Detailing | Privacy Policy" />
+        <meta
+          property="og:description"
+          content="Understand how Myst Detailing handles your personal data and privacy on our site and services."
+        />
+        <meta
+          property="og:image"
+          content="https://mystdetailing.ca/images/og-extractor-kit.jpg"
+        />
+      </Helmet>
+
       <Container mb={"xl"} maw={1200} mx="auto">
         <Title order={1} style={{ textAlign: "center" }} my={"xl"}>
           Privacy Policy

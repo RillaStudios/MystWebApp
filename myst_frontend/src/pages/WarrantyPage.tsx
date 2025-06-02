@@ -1,9 +1,39 @@
 import { Container, Title, Text, Divider } from "@mantine/core";
 import HeadFootLayout from "../layouts/HeadFootLayout";
+import { Helmet } from "react-helmet-async";
 
 export default function WarrantyPage() {
   return (
     <HeadFootLayout>
+      <Helmet>
+        <title>Myst Detailing | Warranty</title>
+        <meta
+          name="description"
+          content="Learn about the warranty coverage for the Myst Detailing Car Extractor Kit. Understand our commitment to product quality and your protection."
+        />
+        <meta
+          name="keywords"
+          content="
+      warranty, product warranty, Myst Detailing,
+      car extractor kit warranty, product guarantee, Canada
+    "
+        />
+        <meta name="robots" content="index, follow" />
+        <link rel="canonical" href="https://mystdetailing.ca/warranty" />
+
+        {/* Open Graph */}
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://mystdetailing.ca/warranty" />
+        <meta property="og:title" content="Myst Detailing | Warranty" />
+        <meta
+          property="og:description"
+          content="Discover the warranty terms and product guarantee for the Myst Detailing Car Extractor Kit."
+        />
+        <meta
+          property="og:image"
+          content="https://mystdetailing.ca/images/og-extractor-kit.jpg"
+        />
+      </Helmet>
       <Container mb={"xl"} maw={1200} mx="auto">
         <Title order={1} style={{ textAlign: "center" }} my={"xl"}>
           The Mystle – 1-Year Limited Warranty

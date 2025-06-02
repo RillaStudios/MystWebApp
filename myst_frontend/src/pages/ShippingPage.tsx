@@ -1,9 +1,42 @@
 import { Container, Title, Text, Divider } from "@mantine/core";
 import HeadFootLayout from "../layouts/HeadFootLayout";
+import { Helmet } from "react-helmet-async";
 
 export default function ShippingPage() {
   return (
     <HeadFootLayout>
+      <Helmet>
+        <title>Myst Detailing | Shipping Policy</title>
+        <meta
+          name="description"
+          content="Explore Myst Detailing's shipping policy for the Car Extractor Kit. Learn about delivery times, shipping costs, and order tracking."
+        />
+        <meta
+          name="keywords"
+          content="
+            shipping policy, delivery, order tracking, Myst Detailing,
+            car extractor kit shipping, shipping Canada, shipping times, shipping costs
+            "
+        />
+        <meta name="robots" content="index, follow" />
+        <link rel="canonical" href="https://mystdetailing.ca/shipping-policy" />
+
+        {/* Open Graph */}
+        <meta property="og:type" content="website" />
+        <meta
+          property="og:url"
+          content="https://mystdetailing.ca/shipping-policy"
+        />
+        <meta property="og:title" content="Myst Detailing | Shipping Policy" />
+        <meta
+          property="og:description"
+          content="Find out about delivery options, shipping costs, and order tracking for the Myst Detailing Car Extractor Kit."
+        />
+        <meta
+          property="og:image"
+          content="https://mystdetailing.ca/images/og-extractor-kit.jpg"
+        />
+      </Helmet>
       <Container mb={"xl"} maw={1200} mx="auto">
         <Title order={1} style={{ textAlign: "center" }} my={"xl"}>
           Shipping & Delivery Policy

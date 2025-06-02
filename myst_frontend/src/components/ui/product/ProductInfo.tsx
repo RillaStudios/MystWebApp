@@ -33,12 +33,12 @@ export default function ProductInfo({
       </Spoiler>
       <Space h={20} />
       {checkout ? (
-        <Group gap={4}>
-          <Title order={2} fw={"bold"}>
+        <Group gap={4} align="end">
+          <Title order={2} fw={"bold"} lh={1}>
             {price}
           </Title>
-          <Text size="sm" c="dimmed">
-            + tax
+          <Text size="xs" c="dimmed" pl={4}>
+            All Taxes Included
           </Text>
         </Group>
       ) : (

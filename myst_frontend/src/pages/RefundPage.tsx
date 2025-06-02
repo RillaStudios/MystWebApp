@@ -1,9 +1,43 @@
 import { Container, Title, Text, Divider } from "@mantine/core";
 import HeadFootLayout from "../layouts/HeadFootLayout";
+import { Helmet } from "react-helmet-async";
 
 export default function RefundPage() {
   return (
     <HeadFootLayout>
+      <Helmet>
+        <title>Myst Detailing | Refund Policy</title>
+        <meta
+          name="description"
+          content="Learn about Myst Detailing's refund policy for the Car Extractor Kit. Find out how to request a refund and our terms for returns and exchanges."
+        />
+        <meta
+          name="keywords"
+          content="
+      refund policy, returns, exchanges, Myst Detailing,
+      car extractor kit refund, product returns, purchase refund Canada
+    "
+        />
+        <meta name="robots" content="index, follow" />
+        <link rel="canonical" href="https://mystdetailing.ca/refund-policy" />
+
+        {/* Open Graph */}
+        <meta property="og:type" content="website" />
+        <meta
+          property="og:url"
+          content="https://mystdetailing.ca/refund-policy"
+        />
+        <meta property="og:title" content="Myst Detailing | Refund Policy" />
+        <meta
+          property="og:description"
+          content="Review Myst Detailing's refund and return policy for the Car Extractor Kit. Understand your rights and how to get a refund."
+        />
+        <meta
+          property="og:image"
+          content="https://mystdetailing.ca/images/og-extractor-kit.jpg"
+        />
+      </Helmet>
+
       <Container mb={"xl"} maw={1200} mx="auto">
         <Title order={1} style={{ textAlign: "center" }} my={"xl"}>
           Refund Policy

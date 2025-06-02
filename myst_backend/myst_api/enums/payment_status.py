@@ -1,7 +1,5 @@
 import enum
 
 class PaymentStatus(enum.Enum):
-    COMPLETED = "Completed"
-    FAILED = "Failed"
-    REFUNDED = "Refunded"
-    DISPUTED = "Disputed"
+    PAID = "paid"
+    UNPAID = "unpaid"

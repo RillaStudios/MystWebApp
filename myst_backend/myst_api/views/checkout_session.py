@@ -3,6 +3,7 @@ from rest_framework.response import Response
 from rest_framework import status
 import stripe
 from django.conf import settings
+from myst_api.models.order import Order
 from myst_api.models.product import Product
 from myst_api.service.price_conversion import convert_price
 
@@ -22,8 +23,18 @@ class CreateCheckoutSessionView(APIView):
             )
 
             session_items = stripe.checkout.Session.list_line_items(
-                session_id)
-            return Response({"session": session, "items": session_items}, status=status.HTTP_200_OK)
+                session_id
+            )
+
+            order_id = None
+            if session:
+                if session.payment_intent:
+                    order = Order.objects.filter(payment_id=session.payment_intent).first()
+                    order_id = order.order_id if order else None
+
+            oid = order_id
+
+            return Response({"session": session, "items": session_items, "order_id": oid}, status=status.HTTP_200_OK)
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
@@ -59,9 +70,7 @@ class CreateCheckoutSessionView(APIView):
                 adaptive_pricing={"enabled": False},
                 automatic_tax={'enabled': False},
                 mode='payment',
-                shipping_address_collection={
-                    'allowed_countries': ['CA', 'US'],
-                },
+                shipping_address_collection={},
                 ui_mode='custom',
           )
 

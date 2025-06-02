@@ -1,4 +1,4 @@
-import { IconAt, IconMapPin, IconPhone, IconSun } from "@tabler/icons-react";
+import { IconAt, IconSun } from "@tabler/icons-react";
 import { Box, Stack, Text } from "@mantine/core";
 import classes from "../../css/ContactIcons.module.css";
 
@@ -33,8 +33,8 @@ function ContactIcon({
 
 const MOCKDATA = [
   { title: "Email", description: "mystdetailing@gmail.com", icon: IconAt },
-  { title: "Phone", description: "+49 (800) 335 35 35", icon: IconPhone },
-  { title: "Address", description: "844 Morris Park avenue", icon: IconMapPin },
+  // { title: "Phone", description: "+49 (800) 335 35 35", icon: IconPhone },
+  // { title: "Address", description: "844 Morris Park avenue", icon: IconMapPin },
 ];
 
 export function ContactIconsList() {

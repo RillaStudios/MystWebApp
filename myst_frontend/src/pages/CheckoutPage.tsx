@@ -1,31 +1,45 @@
 import { CheckoutProvider } from "@stripe/react-stripe-js";
 import { loadStripe, type Appearance } from "@stripe/stripe-js";
 import axios from "axios";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { MYST_AUTH_ENDPOINTS } from "../config/myst_api";
 import { useLocation } from "react-router-dom";
 import type { Product } from "../types/Product";
 import CustomCheckout from "../components/forms/CustomCheckout";
+import { useCurrency } from "../context/CurrencyContext";
+import { Center, Loader } from "@mantine/core";
+import HeadFootLayout from "../layouts/HeadFootLayout";
+import { Helmet } from "react-helmet-async";
 
-const stripePromise = loadStripe(
-  "pk_test_51RPXJd050Kn7qGrTrB3W4nRQSY9k62vpB6XbttCUhLydemYN3YEhzh3nrepsDt7SjoWleMImCMCPSJsgb5kmEkcB00lOiaKqXo",
-);
+const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY);
 
 export default function CheckoutPage() {
   const location = useLocation();
   const { product_id, quantity } = location.state;
-
-  const clientSecret = useMemo(() => {
-    return axios
-      .post(MYST_AUTH_ENDPOINTS.CHECKOUT.CREATE_SESSION, {
-        product_id: product_id,
-        quantity: quantity,
-      })
-      .then((response) => response.data.clientSecret);
-  }, []);
+  const { currency, loading } = useCurrency();
 
   const [loadingProduct, setLoadingProduct] = useState(true);
   const [product, setProduct] = useState<Product>();
+  const [clientSecret, setClientSecret] = useState<string>("");
+  const isValidClientSecret =
+    clientSecret.startsWith("cs_") && clientSecret.includes("_secret_");
+
+  useEffect(() => {
+    if (!loading && currency) {
+      axios
+        .post(MYST_AUTH_ENDPOINTS.CHECKOUT.CREATE_SESSION, {
+          product_id: product_id,
+          quantity: quantity,
+          currency: currency.toLocaleUpperCase(),
+        })
+        .then((response) => setClientSecret(response.data.clientSecret))
+        .catch((error) => {
+          console.error("Error creating checkout session:", error);
+          setClientSecret("");
+        });
+    }
+    console.log("New Currency:", currency);
+  }, [loading, currency, product_id, quantity]);
 
   useEffect(() => {
     setLoadingProduct(true);
@@ -50,18 +64,47 @@ export default function CheckoutPage() {
   const loader = "auto";
 
   return (
-    <CheckoutProvider
-      stripe={stripePromise}
-      options={{
-        fetchClientSecret: () => clientSecret,
-        elementsOptions: { appearance, loader },
-      }}
-    >
-      {!loadingProduct && (
-        <CustomCheckout
-          product_img_url={`http://localhost:8000${product?.product_images[0].image_url}`}
+    <HeadFootLayout>
+      <Helmet>
+        <title>Myst Detailing | Checkout</title>
+        <meta
+          name="description"
+          content="Complete your purchase of the Myst Detailing Car Extractor Kit. Secure checkout with multiple payment options."
         />
+        <meta
+          name="keywords"
+          content="
+            checkout, buy car extractor kit, secure payment, Myst Detailing,
+            car cleaning products purchase, online order car extractor,
+            car detailing kit checkout, Canada
+          "
+        />
+        <meta name="robots" content="noindex, nofollow" />
+        <link rel="canonical" href="https://mystdetailing.ca/checkout" />
+      </Helmet>
+      {!loadingProduct && isValidClientSecret && (
+        <div style={{ minHeight: "90vh" }}>
+          <CheckoutProvider
+            key={clientSecret}
+            stripe={stripePromise}
+            options={{
+              fetchClientSecret: () => Promise.resolve(clientSecret),
+              elementsOptions: { appearance, loader },
+            }}
+          >
+            <CustomCheckout
+              product_img_url={`http://localhost:8000${product?.product_images[0].image_url}`}
+              product_id={product!.product_id}
+            />
+          </CheckoutProvider>
+        </div>
       )}
-    </CheckoutProvider>
+      {/* Optionally, show a loader or error if clientSecret is not ready */}
+      {(loadingProduct || !isValidClientSecret) && (
+        <Center style={{ height: "90vh" }}>
+          <Loader size={"lg"} type="dots" />
+        </Center>
+      )}
+    </HeadFootLayout>
   );
 }

@@ -26,8 +26,12 @@ const data = [
   {
     title: "Support",
     links: [
-      { label: "Track Your Order", link: "#" },
-      { label: "User Manual", link: "#" },
+      { label: "Track Your Order", link: "/track-order" },
+      {
+        label: "User Manual",
+        link: "/MystUserManual.pdf",
+        external: true,
+      },
     ],
   },
 ];
@@ -42,6 +46,17 @@ export function Footer() {
           component={HashLink}
           smooth
           to={link.link}
+        >
+          {link.label}
+        </Text>
+      ) : link.external ? (
+        <Text
+          key={index}
+          className={classes.link}
+          component="a"
+          href={link.link}
+          target="_blank"
+          rel="noopener noreferrer"
         >
           {link.label}
         </Text>

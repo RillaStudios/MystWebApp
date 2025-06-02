@@ -15,15 +15,12 @@ from pathlib import Path
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
-
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'django-insecure-@pb=eqh4^-8^w=_3qv!%r0j=4+=c$z5_5r9#=-%z99(n15k4&4'
 
 STRIPE_PUBLIC_KEY = 'pk_test_51RPXJd050Kn7qGrTrB3W4nRQSY9k62vpB6XbttCUhLydemYN3YEhzh3nrepsDt7SjoWleMImCMCPSJsgb5kmEkcB00lOiaKqXo'
 STRIPE_SECRET_KEY = 'sk_test_51RPXJd050Kn7qGrTPrELiPYhlPf7kpHFcP3fynwKfK7LQr8Rx9E3dEuJ9C8tycYiTuU32JXVhmWJFnwxx8vz1m7c00F8Q25g1E'
+STRIPE_WEBHOOK_SECRET = 'whsec_28fd2c083f9fdf34486d4160ba89f05d0bc5cdb8db3717bdb64912936a14b8e5'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -46,6 +43,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -53,13 +51,13 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'corsheaders.middleware.CorsMiddleware',
 ]
 
 CORS_ALLOW_CREDENTIALS = True
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:5173",  # Your frontend origin
 ]
+
 CORS_ALLOW_METHODS = ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"]
 CORS_ALLOW_HEADERS = ["Content-Type", "Authorization"]
 

@@ -55,7 +55,7 @@ const qaFour = {
       behind our products — if something goes wrong due to a manufacturing
       defect within the first year, we’ll make it right. You can review the full
       warranty details, including what's covered and how to make a claim at{" "}
-      <Anchor component="a" href="https://mystdetailing.ca/warranty">
+      <Anchor component="a" href="/warranty">
         https://mystdetailing.ca/warranty
       </Anchor>
     </>

@@ -1,9 +1,49 @@
 import { Container, Title, Text, Divider, Anchor } from "@mantine/core";
 import HeadFootLayout from "../layouts/HeadFootLayout";
+import { Helmet } from "react-helmet-async";
 
 export default function TermsPage() {
   return (
     <HeadFootLayout>
+      <Helmet>
+        <title>Myst Detailing | Terms and Conditions</title>
+        <meta
+          name="description"
+          content="Read the Terms and Conditions of Myst Detailing. Understand the rules, user responsibilities, and legal agreements for using our website and purchasing our Car Extractor Kit."
+        />
+        <meta
+          name="keywords"
+          content="
+      terms and conditions, user agreement, Myst Detailing,
+      car extractor kit terms, website usage policy, purchase agreement, Canada
+    "
+        />
+        <meta name="robots" content="index, follow" />
+        <link
+          rel="canonical"
+          href="https://mystdetailing.ca/terms-and-conditions"
+        />
+
+        {/* Open Graph */}
+        <meta property="og:type" content="website" />
+        <meta
+          property="og:url"
+          content="https://mystdetailing.ca/terms-and-conditions"
+        />
+        <meta
+          property="og:title"
+          content="Myst Detailing | Terms and Conditions"
+        />
+        <meta
+          property="og:description"
+          content="Review the Terms and Conditions governing the use of Myst Detailing’s website and purchases of the Car Extractor Kit."
+        />
+        <meta
+          property="og:image"
+          content="https://mystdetailing.ca/images/og-extractor-kit.jpg"
+        />
+      </Helmet>
+
       <Container mb={"xl"} maw={1200} mx="auto">
         <Title order={1} style={{ textAlign: "center" }} my={"xl"}>
           Terms and Conditions
