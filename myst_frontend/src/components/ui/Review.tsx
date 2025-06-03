@@ -31,11 +31,7 @@ export function Comment({
   return (
     <Paper withBorder radius="md" className={classes.comment} w={300}>
       <Group>
-        <Avatar
-          src="https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/avatars/avatar-2.png"
-          alt="Jacob Warnhalter"
-          radius="xl"
-        />
+        <Avatar alt={reviewerName || "Reviewer"} radius="xl" />
         <Text fz="sm">{reviewerName || "Anonymous"}</Text>
       </Group>
       <Stack gap={10} className={classes.body} pt={5}>

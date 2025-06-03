@@ -19,11 +19,13 @@ export default function BuyNowButton({
   quantity = 1,
   product_id = 1,
   size = "md",
+  isMobile = false,
 }: {
   checkoutButton?: boolean;
   quantity?: number;
   product_id?: number;
   size?: "sm" | "md" | "lg";
+  isMobile: boolean | undefined;
 }) {
   // Hook to navigate programmatically
   const navigate = useNavigate();
@@ -31,6 +33,7 @@ export default function BuyNowButton({
   return (
     <Button
       size={size}
+      w={isMobile ? "100%" : "auto"}
       onClick={() => {
         if (checkoutButton) {
           navigate("/checkout", {

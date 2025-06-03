@@ -24,7 +24,7 @@ export function ProductImageCarousel({ images }: { images?: ProductImage[] }) {
         .map((image) => (
           <Carousel.Slide key={image.order}>
             <Image
-              src={`http://localhost:8000${image.image_url}`}
+              src={`${import.meta.env.VITE_ASSETS_URL}${image.image_url}`}
               height={isMobile ? 300 : 500}
             />
           </Carousel.Slide>

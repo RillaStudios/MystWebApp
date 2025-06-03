@@ -126,8 +126,6 @@ export default function TrackOrderPage() {
       )
       .then((response) => {
         setOrderInView(true);
-        // Here you would typically update the state to display the order details
-        console.log("Order details:", response.data);
 
         setOrderDetails(response.data);
       })

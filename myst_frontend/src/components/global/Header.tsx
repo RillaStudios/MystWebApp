@@ -1,12 +1,13 @@
 import { useState } from "react";
 import {
+  Anchor,
   Box,
   Burger,
   Divider,
   Drawer,
   Grid,
   Group,
-  ScrollArea,
+  Space,
   Text,
 } from "@mantine/core";
 import classes from "../../css/Header.module.css";
@@ -16,12 +17,27 @@ import ThemeToggle from "../ui/buttons/theme_toggler";
 import { Link } from "react-router-dom";
 import CountryPicker from "../ui/CountryPicker";
 import { HashLink } from "react-router-hash-link";
+import BuyNowButton from "../ui/buttons/buy_now_button";
+import React from "react";
 
 // Hardcoded links for the header navigation
 const links = [
   { link: "/", label: "Home" },
   { link: "/#mystle", label: "Mystle" },
   { link: "/#contact", label: "Contact" },
+];
+
+// Hardcoded mobile links for the header navigation
+const mobileLinks = [
+  { link: "/", label: "Home" },
+  { link: "/#mystle", label: "Mystle" },
+  { link: "/#contact", label: "Contact" },
+  { link: "/track-order", label: "Track Your Order" },
+  { link: "/privacy", label: "Privacy Policy", legal: true },
+  { link: "/terms", label: "Terms of Service", legal: true },
+  { link: "/refund", label: "Refund Policy", legal: true },
+  { link: "/shipping", label: "Shipping & Delivery", legal: true },
+  { link: "/warranty", label: "Warranty Information", legal: true },
 ];
 
 /* 
@@ -122,30 +138,88 @@ export function Header() {
           onClose={closeDrawer}
           size="100%"
           padding="md"
-          title="Navigation"
+          title={
+            <Group justify="space-between" align="center">
+              <MystLogo />
+              <Group>
+                <CountryPicker />
+                <ThemeToggle />
+              </Group>
+            </Group>
+          }
           hiddenFrom="sm"
           zIndex={1000000}
         >
-          <ScrollArea h="calc(100vh - 80px)" mx="-md">
-            <Divider my="sm" />
-            {links.map((link) => (
-              <a
-                key={link.label}
-                href={link.link}
-                className={classes.link}
-                data-active={active === link.link || undefined}
-                onClick={(event) => {
-                  event.preventDefault();
-                  setActive(link.link);
-                  closeDrawer();
-                }}
-              >
-                {link.label}
-              </a>
-            ))}
+          <Box style={{ position: "relative", height: "100%" }}>
+            <Box
+              style={{
+                overflowY: "auto",
+                paddingBottom: 80,
+                height: "calc(100vh - 84px)",
+              }}
+            >
+              <Divider mb="sm" />
+              {mobileLinks.map((link) => {
+                if (!link.legal) {
+                  return (
+                    <React.Fragment key={link.label}>
+                      <Anchor
+                        key={link.label}
+                        href={link.link}
+                        className={classes.link}
+                        data-active={active === link.link || undefined}
+                        onClick={(event) => {
+                          event.preventDefault();
+                          setActive(link.link);
+                          closeDrawer();
+                        }}
+                      >
+                        {link.label}
+                      </Anchor>
+                      <Space h="xs" />
+                    </React.Fragment>
+                  );
+                }
+              })}
 
-            <Divider my="sm" />
-          </ScrollArea>
+              <Divider mb="sm" />
+
+              {mobileLinks.map((link) => {
+                if (link.legal) {
+                  return (
+                    <React.Fragment key={link.label}>
+                      <Anchor
+                        key={link.label}
+                        href={link.link}
+                        className={classes.link}
+                        data-active={active === link.link || undefined}
+                        onClick={(event) => {
+                          event.preventDefault();
+                          setActive(link.link);
+                          closeDrawer();
+                        }}
+                      >
+                        {link.label}
+                      </Anchor>
+                      <Space h="xs" />
+                    </React.Fragment>
+                  );
+                }
+              })}
+            </Box>
+            <Box
+              style={{
+                position: "absolute",
+                left: 0,
+                right: 0,
+                bottom: 0,
+                padding: 16,
+                background: "var(--mantine-color-body)", // optional: match Drawer bg
+              }}
+            >
+              <BuyNowButton isMobile={true} />
+            </Box>
+          </Box>
         </Drawer>
       </Grid>
     </header>

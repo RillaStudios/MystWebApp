@@ -100,6 +100,11 @@ export default function ProductHero({
       currency: currency.toUpperCase(),
     }).format(priceInLocalCurrency);
 
+    if (isNaN(priceInLocalCurrency)) {
+      setPrice("$0.00");
+      return;
+    }
+
     setPrice(formattedPrice);
   }, [loading, rate, currency, quantity, loadingProduct]);
 

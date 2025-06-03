@@ -9,6 +9,7 @@ import BuyPage from "../../pages/BuyPage";
 import CheckoutPage from "../../pages/CheckoutPage";
 import CheckoutSuccessPage from "../../pages/CheckoutSuccessPage";
 import TrackOrderPage from "../../pages/TrackOrderPage";
+import NotFoundPage from "../../pages/NotFoundPage";
 
 /* 
 A React component that defines the main application router for the Myst Detailing website.
@@ -31,6 +32,8 @@ export default function AppRouter() {
         <Route path="/checkout" element={<CheckoutPage />} />
         <Route path="/checkout/success" element={<CheckoutSuccessPage />} />
         <Route path="/track-order" element={<TrackOrderPage />} />
+        {/* Catch-all route for 404 Not Found */}
+        <Route path="*" element={<NotFoundPage />} />
       </Routes>
     </BrowserRouter>
   );

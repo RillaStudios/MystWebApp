@@ -52,7 +52,7 @@ export function CallToActionHero() {
 
         <Center mt="lg">
           <Group>
-            <BuyNowButton product_id={1} quantity={1} />
+            <BuyNowButton product_id={1} quantity={1} isMobile={false} />
             <Button
               component={HashLink}
               to="/#mystle"

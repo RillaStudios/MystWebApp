@@ -15,15 +15,16 @@ import {
   Textarea,
   LoadingOverlay,
   Text,
+  em,
 } from "@mantine/core";
-import { useDisclosure } from "@mantine/hooks";
+import { useDisclosure, useMediaQuery } from "@mantine/hooks";
 import { useForm } from "@mantine/form";
 import axios from "axios";
 import { MYST_AUTH_ENDPOINTS } from "../../config/myst_api";
 import { notifications } from "@mantine/notifications";
 import type { Review } from "../../types/Review";
 import { useEffect, useRef, useState } from "react";
-import { Comment } from "./CommentHero";
+import { Comment } from "../ui/Review";
 import { Carousel } from "@mantine/carousel";
 import AutoScroll from "embla-carousel-auto-scroll";
 import { useInViewport } from "@mantine/hooks";
@@ -56,6 +57,9 @@ export default function ReviewHero() {
   // Use the useInViewport hook to check if the carousel is in the viewport
   // This is used to enable auto-scrolling only when the carousel is visible
   const { ref, inViewport } = useInViewport();
+
+  //Media query to check if the screen is small
+  const isMobile = useMediaQuery(`(max-width: ${em(750)})`);
 
   // Effect to fetch reviews when the component mounts
   // This uses the getReviews function to fetch data from the server
@@ -311,6 +315,7 @@ export default function ReviewHero() {
                 slideSize="35%"
                 withControls={false}
                 withIndicators={false}
+                slideGap={isMobile ? "md" : ""}
                 emblaOptions={{
                   align: "center",
                   loop: true,

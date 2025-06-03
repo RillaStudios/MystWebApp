@@ -103,6 +103,7 @@ export default function CountryPicker() {
   return (
     <Combobox
       size="xs"
+      zIndex={1000001}
       onOptionSubmit={(optionValue) => {
         setValue(optionValue);
         const foundCurrency = countryList.find(

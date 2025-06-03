@@ -1,7 +1,8 @@
-import { Space, Spoiler, Title, Text, Group } from "@mantine/core";
+import { Space, Spoiler, Title, Text, Group, em } from "@mantine/core";
 import type { Product } from "../../../types/Product";
 import ProductQuantitySelect from "./ProductQuantitySelect";
 import BuyNowButton from "../buttons/buy_now_button";
+import { useMediaQuery } from "@mantine/hooks";
 
 /* 
 A React component that displays product information for the Myst Detailing website.
@@ -23,6 +24,9 @@ export default function ProductInfo({
   quantity: string | number;
   setQuantity: (value: string | number) => void;
 }) {
+  //Media query to check if the screen is small
+  const isMobile = useMediaQuery(`(max-width: ${em(750)})`);
+
   return (
     <>
       <Title order={1}>{product?.product_name || "Undefined"}</Title>
@@ -68,6 +72,7 @@ export default function ProductInfo({
         quantity={typeof quantity === "string" ? parseInt(quantity) : quantity}
         product_id={1}
         size="lg"
+        isMobile={isMobile}
       />
     </>
   );

@@ -7,7 +7,7 @@ import { useLocation } from "react-router-dom";
 import type { Product } from "../types/Product";
 import CustomCheckout from "../components/forms/CustomCheckout";
 import { useCurrency } from "../context/CurrencyContext";
-import { Center, Loader } from "@mantine/core";
+import { Center, Loader, useMantineColorScheme } from "@mantine/core";
 import HeadFootLayout from "../layouts/HeadFootLayout";
 import { Helmet } from "react-helmet-async";
 
@@ -35,6 +35,8 @@ export default function CheckoutPage() {
   // Validate the client secret format
   const isValidClientSecret =
     clientSecret.startsWith("cs_") && clientSecret.includes("_secret_");
+
+  const { colorScheme } = useMantineColorScheme();
 
   /* 
   A useEffect hook to create a Stripe Checkout session when the 
@@ -94,6 +96,23 @@ export default function CheckoutPage() {
   // Define the appearance options for the Stripe Checkout
   const appearance: Appearance = {
     theme: "stripe",
+    ...(colorScheme === "dark" && {
+      variables: {
+        colorPrimary: "#f06e27",
+        colorBackground: "#242424",
+        colorText: "#fff",
+      },
+      rules: {
+        ".Label": {
+          color: "#fff",
+        },
+        ".Input": {
+          backgroundColor: "#2e2e2e",
+          borderColor: "#444",
+          color: "#fff",
+        },
+      },
+    }),
   };
 
   // Define the loader type for the Stripe Checkout
@@ -129,7 +148,9 @@ export default function CheckoutPage() {
             }}
           >
             <CustomCheckout
-              product_img_url={`http://localhost:8000${product?.product_images[0].image_url}`}
+              product_img_url={`${import.meta.env.VITE_ASSETS_URL}${
+                product?.product_images[0].image_url
+              }`}
               product_id={product!.product_id}
             />
           </CheckoutProvider>

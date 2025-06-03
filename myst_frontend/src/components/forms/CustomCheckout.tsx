@@ -10,6 +10,7 @@ import {
   Checkbox,
   Container,
   Divider,
+  em,
   Grid,
   Group,
   Loader,
@@ -18,6 +19,7 @@ import {
   Stepper,
   TextInput,
   Title,
+  useMantineColorScheme,
 } from "@mantine/core";
 import OrderSummary from "../ui/product/OrderSummary";
 import {
@@ -26,7 +28,7 @@ import {
 } from "../../service/checkout_service";
 import { useState } from "react";
 import { notifications } from "@mantine/notifications";
-import { useDisclosure } from "@mantine/hooks";
+import { useDisclosure, useMediaQuery } from "@mantine/hooks";
 
 /* 
 A custom checkout component that integrates with Stripe's Checkout API.
@@ -61,6 +63,12 @@ export default function CustomCheckout({
 
   // Loading overlay state management
   const [visible, { open, close }] = useDisclosure(false);
+
+  // Theming state management
+  const { colorScheme } = useMantineColorScheme();
+
+  //Media query to check if the screen is small
+  const isMobile = useMediaQuery(`(max-width: ${em(750)})`);
 
   // Shipping and billing address state management
   const [shippingAddress, setShippingAddress] = useState<{
@@ -135,8 +143,6 @@ export default function CustomCheckout({
       } catch (error) {
         console.error("Error updating email:", error);
       }
-
-      console.log(checkout.total.total.amount);
 
       // Proceed to the next step
       setActive((current) => (current < 2 ? current + 1 : current));
@@ -265,6 +271,33 @@ export default function CustomCheckout({
                         setEmailError(null);
                       }}
                       required
+                      styles={{
+                        section: {
+                          marginBottom: "1rem",
+                        },
+                        label: {
+                          fontSize: "0.93rem",
+                          marginBottom: "0.25rem",
+                          transition:
+                            "transform 0.5s cubic-bezier(0.19, 1, 0.22, 1), opacity 0.5s cubic-bezier(0.19, 1, 0.22, 1)",
+                          fontFamily:
+                            '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif',
+                          fontWeight: 400,
+                          lineHeight: "1.15",
+                        },
+                        input: {
+                          padding: "0.75rem",
+                          borderRadius: "5px",
+                          border: `1px solid ${
+                            colorScheme === "dark" ? "#444" : "#ccc"
+                          }`,
+                          boxShadow:
+                            "0px 1px 1px rgba(0, 0, 0, 0.03), 0px 3px 6px rgba(0, 0, 0, 0.02)",
+                          fontSize: "16px",
+                          lineHeight: "1",
+                          height: "auto",
+                        },
+                      }}
                     />
                   )}
                 </Stepper.Step>
@@ -372,12 +405,17 @@ export default function CustomCheckout({
               {/* Stepper Navigation */}
               <Group justify="center" mt="xl">
                 {active > 0 && (
-                  <Button variant="outline" onClick={prevStep}>
+                  <Button
+                    variant="outline"
+                    w={isMobile ? "100%" : "auto"}
+                    onClick={prevStep}
+                  >
                     Back
                   </Button>
                 )}
                 <Button
                   key={`next-step-${active}`}
+                  w={isMobile ? "100%" : "auto"}
                   onClick={active !== 2 ? nextStep : undefined}
                   type={active === 2 ? "submit" : "button"}
                 >
@@ -389,7 +427,11 @@ export default function CustomCheckout({
         </Grid.Col>
         <Grid.Col span={{ base: 12, md: 5 }}>
           {/* Order Summary Component */}
-          <OrderSummary product_img_url={product_img_url} checkout={checkout} />
+          <OrderSummary
+            product_img_url={product_img_url}
+            checkout={checkout}
+            isMobile={isMobile}
+          />
         </Grid.Col>
       </Grid>
     </Container>
