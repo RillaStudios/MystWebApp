@@ -39,7 +39,7 @@ services:
       - static_data:/app/static
       - media_data:/app/media
     ports:
-      - "8000:8000"
+      - "7999:7999"
     depends_on:
       - mysql
 
