@@ -6,10 +6,10 @@ services:
     container_name: mysql
     restart: always
     environment:
-      MYSQL_DATABASE: ${{project.MYSQL_DATABASE}}
-      MYSQL_USER: ${{project.MYSQL_USER}}
-      MYSQL_PASSWORD: ${{project.MYSQL_PASSWORD}}
-      MYSQL_ROOT_PASSWORD: ${{project.MYSQL_ROOT_PASSWORD}}
+      MYSQL_DATABASE: ${project.MYSQL_DATABASE}
+      MYSQL_USER: ${project.MYSQL_USER}
+      MYSQL_PASSWORD: ${project.MYSQL_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${project.MYSQL_ROOT_PASSWORD}
     volumes:
       - mysql_data:/var/lib/mysql
     ports:
@@ -20,21 +20,21 @@ services:
     container_name: myst_backend
     restart: always
     environment:
-      MYSQL_DATABASE: ${{project.MYSQL_DATABASE}}
-      MYSQL_USER: ${{project.MYSQL_USER}}
-      MYSQL_PASSWORD: ${{project.MYSQL_PASSWORD}}
-      MYSQL_ROOT_PASSWORD: ${{project.MYSQL_ROOT_PASSWORD}}
-      CORS_ALLOW_ORIGINS: ${{project.CORS_ALLOW_ORIGINS}}
-      STRIPE_WEBHOOK_SECRET: ${{project.STRIPE_WEBHOOK_SECRET}}
-      STRIPE_SECRET_KEY: ${{project.STRIPE_SECRET_KEY}}
-      EMAIL_BACKEND: ${{project.EMAIL_BACKEND}}
-      EMAIL_HOST: ${{project.EMAIL_HOST}}
-      EMAIL_PORT: ${{project.EMAIL_PORT}}
-      EMAIL_USE_TLS: ${{project.EMAIL_USE_TLS}}
-      EMAIL_USE_SSL: ${{project.EMAIL_USE_SSL}}
-      EMAIL_HOST_USER: ${{project.EMAIL_HOST_USER}}
-      EMAIL_HOST_PASSWORD: ${{project.EMAIL_HOST_PASSWORD}}
-      SECRET_KEY: ${{project.SECRET_KEY}}
+      MYSQL_DATABASE: ${project.MYSQL_DATABASE}
+      MYSQL_USER: ${project.MYSQL_USER}
+      MYSQL_PASSWORD: ${project.MYSQL_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${project.MYSQL_ROOT_PASSWORD}
+      CORS_ALLOW_ORIGINS: ${project.CORS_ALLOW_ORIGINS}
+      STRIPE_WEBHOOK_SECRET: ${project.STRIPE_WEBHOOK_SECRET}
+      STRIPE_SECRET_KEY: ${project.STRIPE_SECRET_KEY}
+      EMAIL_BACKEND: ${project.EMAIL_BACKEND}
+      EMAIL_HOST: ${project.EMAIL_HOST}
+      EMAIL_PORT: ${project.EMAIL_PORT}
+      EMAIL_USE_TLS: ${project.EMAIL_USE_TLS}
+      EMAIL_USE_SSL: ${project.EMAIL_USE_SSL}
+      EMAIL_HOST_USER: ${project.EMAIL_HOST_USER}
+      EMAIL_HOST_PASSWORD: ${project.EMAIL_HOST_PASSWORD}
+      SECRET_KEY: ${project.SECRET_KEY}
     volumes:
       - static_data:/app/static
       - media_data:/app/media
@@ -50,9 +50,9 @@ frontend:
   volumes:
     - myst_frontend_dist:/app/dist
   environment:
-    VITE_API_URL: ${{project.VITE_API_URL}}
-    VITE_ASSETS_URL: ${{project.VITE_ASSETS_URL}}
-    VITE_STRIPE_PUBLISHABLE_KEY: ${{project.VITE_STRIPE_PUBLISHABLE_KEY}}
+    VITE_API_URL: ${project.VITE_API_URL}
+    VITE_ASSETS_URL: ${project.VITE_ASSETS_URL}
+    VITE_STRIPE_PUBLISHABLE_KEY: ${project.VITE_STRIPE_PUBLISHABLE_KEY}
   command: >
     sh -c "npm install && npm run build"
 
