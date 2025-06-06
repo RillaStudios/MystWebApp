@@ -2,7 +2,7 @@
 <project version="4">
   <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
     <data-source source="LOCAL" name="db" uuid="a69a5f10-4d4b-4bfc-97f8-f483e4c7603a">
-      <driver-ref>93bfbf31-9113-4cb9-8265-7f956ff15421</driver-ref>
+      <driver-ref>sqlite.xerial</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>org.sqlite.JDBC</jdbc-driver>
       <jdbc-url>jdbc:sqlite:C:\Users\izaak\Desktop\Projects\Myst\myst_backend\db.sqlite3</jdbc-url>
