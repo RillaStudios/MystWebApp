@@ -1,10 +1,16 @@
 version: "3.8"
 
 services:
-  mysql:
-    image: mysql:8.0
-    container_name: myst_mysql
-    restart: always
+  myst_db:
+    image: mysql:9.3.0
+    deploy:
+      restart_policy:
+        condition: on-failure
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
     environment:
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
       MYSQL_DATABASE: ${MYSQL_DATABASE}
@@ -12,13 +18,15 @@ services:
       MYSQL_PASSWORD: ${MYSQL_PASSWORD}
     volumes:
       - myst_mysql_data:/var/lib/mysql
-    ports:
-      - "3306:3306"
+    networks:
+      - myst_network
+      - nginx-proxy_npm-network
 
-  backend:
+  myst_backend:
     build: ./myst_backend
-    container_name: myst_backend
-    restart: always
+    deploy:
+      restart_policy:
+        condition: on-failure
     environment:
       MYSQL_DATABASE: ${MYSQL_DATABASE}
       MYSQL_USER: ${MYSQL_USER}
@@ -42,33 +50,31 @@ services:
       - "7999:7999"
     depends_on:
       - mysql
+    networks:
+      - myst_network
+      - nginx-proxy_npm-network
 
-frontend:
-  build: ./myst_frontend
-  container_name: myst_frontend
-  restart: "no"
-  volumes:
-    - myst_frontend_dist:/app/dist
-  environment:
-    VITE_API_URL: ${VITE_API_URL}
-    VITE_ASSETS_URL: ${VITE_ASSETS_URL}
-    VITE_STRIPE_PUBLISHABLE_KEY: ${VITE_STRIPE_PUBLISHABLE_KEY}
-  command: >
-    sh -c "npm install && npm run build"
+  myst_frontend:
+    build:
+      context: ./myst_frontend
+      target: builder
+    volumes:
+      - myst_frontend_dist:/app/dist
+    environment:
+      VITE_API_URL: ${VITE_API_URL}
+      VITE_ASSETS_URL: ${VITE_ASSETS_URL}
+      VITE_STRIPE_PUBLISHABLE_KEY: ${VITE_STRIPE_PUBLISHABLE_KEY}
+    command: >
+      sh -c "npm install && npm run build"
+    networks:
+      - myst_network
+      - nginx-proxy_npm-network
 
-nginx:
-  image: nginx:alpine
-  container_name: myst_nginx
-  restart: always
-  volumes:
-    - ./nginx.conf:/etc/nginx/nginx.conf
-    - static_data:/app/static
-    - media_data:/app/media
-    - myst_frontend_dist:/usr/share/nginx/html
-  depends_on:
-    - backend
-  ports:
-    - "80:80"
+networks:
+  myst_network:
+    driver: overlay
+  nginx-proxy_npm-network:
+    external: true
 
 volumes:
   myst_mysql_data:

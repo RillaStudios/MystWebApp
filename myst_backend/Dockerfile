@@ -1,4 +1,4 @@
-FROM python:3.11-slim
+FROM python:3.13-slim
 
 WORKDIR /app
 
@@ -17,6 +17,6 @@ COPY . .
 # Collect static files and migrate DB (optional at entrypoint)
 RUN python manage.py collectstatic --noinput
 
-EXPOSE 8000
+EXPOSE 7999
 
 CMD ["gunicorn", "--bind", "0.0.0.0:7999", "myst_backend.wsgi:application"]
