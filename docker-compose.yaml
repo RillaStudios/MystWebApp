@@ -72,7 +72,7 @@ services:
       - static_data:/app/staticfiles
       - media_data:/app/media
       - myst_frontend_dist:/usr/share/nginx/html
-      - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro
+      - /home/iforddow/nginx.conf:/etc/nginx/conf.d/default.conf:ro
     networks:
       - myst_network
       - nginx-proxy_npm-network
