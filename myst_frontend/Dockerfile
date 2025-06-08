@@ -1,8 +1,19 @@
-# Build only
-FROM node:24-alpine3.21 AS builder
+# Build only container
+FROM node:24-alpine3.21 AS build
+
 WORKDIR /app
+
 COPY package*.json ./
-RUN npm install
+RUN npm install --legacy-peer-deps --force
+
 COPY . .
 RUN npm run build
-# Output ends up in /app/dist which is mounted to myst_frontend_dist
+
+# Output only the dist folder
+FROM alpine
+WORKDIR /dist
+COPY --from=build /app/dist .
+
+VOLUME ["/dist"]
+
+CMD ["/bin/true"]

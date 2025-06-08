@@ -1,12 +1,21 @@
-FROM python:3.13-slim
+FROM python:3.12.11-alpine3.22
 
 WORKDIR /app
 
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    build-essential \
-    default-libmysqlclient-dev \
-    pkg-config && \
-    rm -rf /var/lib/apt/lists/*
+RUN apk add --no-cache \
+    build-base \
+    mariadb-dev \
+    gcc \
+    musl-dev \
+    libffi-dev \
+    openssl-dev \
+    pkgconfig \
+    cython \
+    py3-numpy \
+    py3-scipy \
+    py3-pip
+
+RUN pip install --upgrade pip setuptools wheel
 
 COPY requirements.txt .
 
