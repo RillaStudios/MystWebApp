@@ -1,8 +1,9 @@
 from django.conf import settings
 from django.core.mail import send_mail
 from rest_framework.response import Response
-from rest_framework.throttling import AnonRateThrottle
 from rest_framework.views import APIView
+
+from myst_api.auth.csrf_exempt import CsrfExemptSessionAuthentication
 from myst_api.models.contact import Contact
 from myst_api.throttles.contact_anon_throttle import ContactAnonThrottle
 
@@ -23,6 +24,7 @@ class ContactView(APIView):
     @author: IFD
     """
     throttle_classes = [ContactAnonThrottle]
+    authentication_classes = [CsrfExemptSessionAuthentication]
 
     def post(self, request) -> Response:
         """

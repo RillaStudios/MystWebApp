@@ -23,9 +23,6 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . .
 
-# Collect static files and migrate DB (optional at entrypoint)
-RUN python manage.py collectstatic --noinput
-
 EXPOSE 7999
 
-CMD ["gunicorn", "--bind", "0.0.0.0:7999", "myst_backend.wsgi:application"]
+CMD ["sh", "-c", "python manage.py migrate && python manage.py collectstatic --noinput && gunicorn myst_backend.wsgi:application --bind 0.0.0.0:7999"]

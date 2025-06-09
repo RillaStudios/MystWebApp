@@ -2,6 +2,8 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from django.core.mail import send_mail
+
+from myst_api.auth.csrf_exempt import CsrfExemptSessionAuthentication
 from myst_api.models.order import Order
 from myst_api.models.review import Review
 from myst_api.serializer.review_serializer import ReviewSerializer
@@ -21,6 +23,7 @@ class ReviewView(APIView):
     @author: IFD
     """
     throttle_classes = [ReviewAnonThrottle]
+    authentication_classes = [CsrfExemptSessionAuthentication]
 
     def get(self, request):
         """

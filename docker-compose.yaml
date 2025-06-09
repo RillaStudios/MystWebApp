@@ -18,6 +18,7 @@ services:
       MYSQL_PASSWORD: ${MYSQL_PASSWORD}
     volumes:
       - myst_mysql_data:/var/lib/mysql
+      - /home/iforddow/myst_db.cnf:/etc/mysql/conf.d/myst_db.cnf:ro
     networks:
       - myst_network
       - nginx-proxy_npm-network
@@ -31,6 +32,8 @@ services:
       MYSQL_DATABASE: ${MYSQL_DATABASE}
       MYSQL_USER: ${MYSQL_USER}
       MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_HOST: ${MYSQL_HOST}
+      MYSQL_PORT: ${MYSQL_PORT}
       CORS_ALLOWED_ORIGINS: ${CORS_ALLOWED_ORIGINS}
       STRIPE_WEBHOOK_SECRET: ${STRIPE_WEBHOOK_SECRET}
       STRIPE_SECRET_KEY: ${STRIPE_SECRET_KEY}
@@ -60,6 +63,12 @@ services:
     networks:
       - myst_network
       - nginx-proxy_npm-network
+    volumes:
+      - static_data:/usr/share/nginx/html/static
+      - media_data:/usr/share/nginx/html/media
+    depends_on:
+      - myst_backend
+      - myst_db
     deploy:
       restart_policy:
         condition: on-failure

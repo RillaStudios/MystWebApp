@@ -1,8 +1,11 @@
+from rest_framework.authentication import SessionAuthentication
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 import stripe
 from django.conf import settings
+
+from myst_api.auth.csrf_exempt import CsrfExemptSessionAuthentication
 from myst_api.models.order import Order
 from myst_api.models.product import Product
 from myst_api.service.price_conversion import convert_price
@@ -21,6 +24,7 @@ class CreateCheckoutSessionView(APIView):
     @author: IFD
     """
     throttle_classes = [CheckoutSessionAnonThrottle]
+    authentication_classes = [CsrfExemptSessionAuthentication]
 
     def get(self, request):
         """
@@ -75,8 +79,15 @@ class CreateCheckoutSessionView(APIView):
         try:
             # Assume the request contains a product_id and quantity
             product_id = request.data.get('product_id')
-            quantity = request.data.get('quantity', 1)
             currency = request.data.get('currency')
+            quantity = request.data.get('quantity', 1)
+
+            try:
+                quantity = int(str(quantity))
+                if quantity < 1:
+                    raise ValueError("Quantity must be at least 1")
+            except (ValueError, TypeError):
+                return Response({'error': 'Invalid quantity'}, status=status.HTTP_400_BAD_REQUEST)
 
             # Fetch the product from your database
             product = Product.objects.get(product_id=product_id)
