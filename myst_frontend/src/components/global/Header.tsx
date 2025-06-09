@@ -1,6 +1,4 @@
-import { useState } from "react";
 import {
-  Anchor,
   Box,
   Burger,
   Divider,
@@ -19,6 +17,7 @@ import CountryPicker from "../ui/CountryPicker";
 import { HashLink } from "react-router-hash-link";
 import BuyNowButton from "../ui/buttons/buy_now_button";
 import React from "react";
+import useActiveLink from "../../hooks/ActiveLinkHook";
 
 // Hardcoded links for the header navigation
 const links = [
@@ -45,12 +44,21 @@ A React component for the header of the Myst Detailing website.
 This header includes navigation links, a logo, a theme toggle button, and a country picker.
 It features a responsive design with a drawer for mobile view, allowing users to navigate the site easily.
 
+@modified Modified from the original Myst Frontend codebase. Made mobile links actually work, and 
+fixed the active link logic.
+
+@modified 2025-06-09
+
 @author IFD
 */
 export function Header() {
   const [drawerOpened, { toggle: toggleDrawer, close: closeDrawer }] =
     useDisclosure(false);
-  const [active, setActive] = useState(links[0].link);
+
+  const isMobile = window.innerWidth < 768; // Adjust breakpoint as needed
+  const linksToUse = isMobile ? mobileLinks : links;
+
+  const { active, setActive } = useActiveLink(linksToUse);
 
   const items = links.map((link) =>
     link.label === "Contact" || link.label === "Mystle" ? (
@@ -163,19 +171,36 @@ export function Header() {
                 if (!link.legal) {
                   return (
                     <React.Fragment key={link.label}>
-                      <Anchor
-                        key={link.label}
-                        href={link.link}
-                        className={classes.link}
-                        data-active={active === link.link || undefined}
-                        onClick={(event) => {
-                          event.preventDefault();
-                          setActive(link.link);
-                          closeDrawer();
-                        }}
-                      >
-                        {link.label}
-                      </Anchor>
+                      {
+                        link.label === "Contact" || link.label === "Mystle" ? (
+                          <Text
+                            key={link.label}
+                            className={classes.link}
+                            component={HashLink}
+                            smooth
+                            to={link.link}
+                            onClick={() => {
+                              setActive(link.link);
+                              closeDrawer();
+                            }}
+                          >
+                            {link.label}
+                          </Text>
+                        ) : (
+                          <Link
+                            key={link.label}
+                            to={link.link}
+                            className={classes.link}
+                            data-active={active === link.link || undefined}
+                            onClick={() => {
+                              setActive(link.link);
+                              closeDrawer();
+                            }}
+                          >
+                            {link.label}
+                          </Link>
+                        )
+                      }
                       <Space h="xs" />
                     </React.Fragment>
                   );
@@ -188,19 +213,18 @@ export function Header() {
                 if (link.legal) {
                   return (
                     <React.Fragment key={link.label}>
-                      <Anchor
+                      <Link
                         key={link.label}
-                        href={link.link}
+                        to={link.link}
                         className={classes.link}
                         data-active={active === link.link || undefined}
-                        onClick={(event) => {
-                          event.preventDefault();
+                        onClick={() => {
                           setActive(link.link);
                           closeDrawer();
                         }}
                       >
                         {link.label}
-                      </Anchor>
+                      </Link>
                       <Space h="xs" />
                     </React.Fragment>
                   );

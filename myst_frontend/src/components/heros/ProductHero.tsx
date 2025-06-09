@@ -14,6 +14,10 @@ A React component that displays a product hero section for the Myst Detailing we
 This component fetches product details based on the provided product ID,
 displays the product information, and allows users to view product images and purchase options.
 
+@modified Made it so if the checkout prop is not true, the component will not show the error 
+notification when the product is not found. This is to avoid annoying notifications if the product is not found
+on the home page product hero.
+
 @author IFD
 */
 export default function ProductHero({
@@ -63,11 +67,14 @@ export default function ProductHero({
         navigate("/", {
           preventScrollReset: false,
         });
-        notifications.show({
-          title: "Error",
-          message: "Product not found. Redirecting to home page.",
-          color: "red",
-        });
+
+        if (checkout) {
+          notifications.show({
+            title: "Error",
+            message: "Product not found. Redirecting to home page.",
+            color: "red",
+          });
+        }
 
         window.scrollTo(0, 0);
       })

@@ -92,7 +92,7 @@ export function Footer() {
         <div className={classes.logo}>
           <MystLogo />
           <Text size="xs" c="dimmed" className={classes.description}>
-            Build fully functional accessible web applications faster than ever
+            Powerful. Portable. Precision Cleaning by Myst Detailing.
           </Text>
         </div>
         <div className={classes.groups}>{groups}</div>
