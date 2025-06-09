@@ -17,26 +17,26 @@ export function ProductImageCarousel({ images }: { images?: ProductImage[] }) {
 
   // Create an array of Carousel slides from the images, sorted by order
   // If no images are provided, display a default image
-  const slides = images
+  const slides = images && images.length > 0
     ? images
-        .slice()
-        .sort((a, b) => a.order - b.order)
-        .map((image) => (
-          <Carousel.Slide key={image.order}>
-            <Image
-              src={`${import.meta.env.VITE_ASSETS_URL}${image.image_url}`}
-              height={isMobile ? 300 : 500}
-            />
-          </Carousel.Slide>
-        ))
-    : [
-        <Carousel.Slide key="default">
+      .slice()
+      .sort((a, b) => a.order - b.order)
+      .map((image) => (
+        <Carousel.Slide key={image.order}>
           <Image
-            src="/images/no_prod_image.jpeg"
+            src={`${import.meta.env.VITE_ASSETS_URL}${image.image_url}`}
             height={isMobile ? 300 : 500}
           />
-        </Carousel.Slide>,
-      ];
+        </Carousel.Slide>
+      ))
+    : [
+      <Carousel.Slide key="default">
+        <Image
+          src="/images/no_prod_image.jpeg"
+          height={isMobile ? 300 : 500}
+        />
+      </Carousel.Slide>,
+    ];
 
   return (
     <Card

@@ -22,7 +22,7 @@ export default function OrderSummary({
       <Divider mb={"sm"} />
       <Box w={isMobile ? 200 : 400} h={isMobile ? 200 : 400} mb="md">
         <Image
-          src={product_img_url || "images/no_prod_image.jpeg"}
+          src={product_img_url || "/images/no_prod_image.jpeg"}
           width={isMobile ? 200 : 400}
           height={isMobile ? 200 : 400}
           fit="fill"

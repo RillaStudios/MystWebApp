@@ -31,6 +31,9 @@ export default function HomePage() {
         <meta name="robots" content="index, follow" />
         <link rel="canonical" href="https://mystdetailing.ca/" />
 
+        {/* This will preload the call to action hero image */}
+        <link rel="preload" as="image" href="/assets/extractor_hero.png" />
+
         {/* Open Graph */}
         <meta property="og:type" content="product" />
         <meta property="og:url" content="https://mystdetailing.ca/" />

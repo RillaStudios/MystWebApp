@@ -57,6 +57,8 @@ export default function MystLogo({
           style={{
             objectFit: "contain",
           }}
+          fetchPriority="high"
+          loading="eager"
         />
       </a>
     ) : (
@@ -68,6 +70,8 @@ export default function MystLogo({
         style={{
           objectFit: "contain",
         }}
+        fetchPriority="high"
+        loading="eager"
       />
     )
   );
